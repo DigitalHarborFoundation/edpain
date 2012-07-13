@@ -42,8 +42,9 @@
     $("#painEntry .role").keyup(showPostButton).blur(showPostButton);
     $("#painEntry textarea").keyup(showPostButton).blur(showPostButton);
     var painDisplayTemplate = _.template($("#painDisplayTemplate").text());
+    var pain = $("#painEntry");
+    var share = $("#painSharing");
     var extractPain = function() {
-      var pain = $("#painEntry");
       var data = {
         role: pain.find(".role").val(),
         'pain': pain.find("textarea").val(),
@@ -56,28 +57,30 @@
           .hide()
           .fadeIn('slow');
       pain.fadeOut('slow', function() { 
+        share.fadeIn('slow');
+      });
+    };
+    var anotherPain = function() {
+      share.fadeOut('slow', function() {
         pain.find("textarea").val("");
         showPostButton();
         pain.fadeIn('slow');
       });
     };
     $("#painEntry .post").click(extractPain);
-    var painEntry = $("#painEntry");
-    var painEntryScale = 40.0;
+    $("#painSharing .back").click(anotherPain);
+    
     var win = $(window);
-    var resizeEntry = function() {
-      painEntry.css('font-size', win.width()/painEntryScale);
-    };
-    resizeEntry();
-    $(window).on('resize',resizeEntry);
-    var pains = $("#pains");
-    var painsScale = 20.0;
-    var win = $(window);
-    var resizePains = function() {
-      pains.css('font-size', win.width()/painsScale);
-    };
-    resizePains();
-    $(window).on('resize',resizePains);
+    var fontResizer = function($el, scale) {
+      var resize = function() {
+        $el.css('font-size', win.width()/scale);
+      }
+      resize();
+      win.on('resize',resize);
+    }
+    fontResizer($("#painEntry"), 40.0);
+    fontResizer($("#pains"), 20.0);
+    fontResizer($("#painSharing"), 40.0);
   });
   </script>
   <style>
@@ -164,19 +167,23 @@
     margin-right: auto;
     margin-top: 2em;
   }
-  #painEntry input::-ms-input-placeholder {
+  #painEntry input::-ms-input-placeholder ,
+  #painSharing input::-ms-input-placeholder{
     color: #AAA;
     text-align: center;
   }
-  #painEntry input::-moz-placeholder {
+  #painEntry input::-moz-placeholder,
+  #painSharing input::-moz-placeholder {
     color: #AAA;
     text-align: center;
   }
-  #painEntry input::-webkit-input-placeholder {
+  #painEntry input::-webkit-input-placeholder,
+  #painSharing input::-webkit-input-placeholder {
     color: #AAA;
     text-align: center;
   }
-  #painEntry input {
+  #painEntry input,
+  #painSharing input {
     margin-left:.5em;
     margin-right:.5em;
     background-color: #DDD;
@@ -220,8 +227,8 @@
   #painEntry .identifiers > *:last-child {
     margin-right: 0;
   }
-  #painEntry .post {
-    width: 100%;
+  #painEntry .post,
+  #painSharing button {
     color: white;
     background-color: #00C12A;
     font-family: "GeosansLight";
@@ -233,27 +240,82 @@
     padding-top: .10em;
     padding-bottom: .30em;
     margin-bottom: 1em;
-    visibility: hidden;
     border-radius:3px;
     box-shadow: 2px 2px 2px #AAA;
+  }
+  #painEntry .post {
+    width: 100%;
+    visibility: hidden;
   }
   #painEntry .post:hover {
     background-color: #27a9e0;
   }
-  #painEntry .post:active {
+  #painEntry .post:active,
+  #painSharing button:active {
     color: #DDD;
     box-shadow: 2px 2px 2px #AAA inset;
+  }
+  #painSharing {
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    display: inline-block;
+    width: 26em;
+    display:none;
+  }
+  #painSharing q {
+    display:block;
+    margin-bottom: 1em;
+    font-size: 165%;
+  }
+  #painSharing q:before {
+    content: "#edpain ";
+  }
+  #painSharing q:after {
+    content: "";
+  }
+  #painSharing button {
+    padding-left: .5em;
+    padding-right: .5em;
+    padding-top: .25em;
+    padding-bottom: .25em;
+    background-color: #27a9e0;
+    opacity: 0.8;
+  }
+  #painSharing button:hover {
+    opacity: 1.0;
+  }
+  #painSharing button.twitter,
+  #painSharing button.facebook {
+    width: 12.7em;
+  }
+  #painSharing button.twitter {
+    margin-right: .25em;
+  }
+  #painSharing p {
+    text-align: center;
+  }
+  #painSharing .email {
+    width: 12.5em;
+    margin-left: 0;
+    margin-right: .25em;
+  }
+  #painSharing .back {
+    margin-left: 18em;
+    background-color: #FEBD25;
   }
   #pains {
     text-align:left;
     font-size: 48pt;
     overflow: visible;
+    margin-top: 1em;
   }
   #pains h2 {
     color: #27a9e0;
     font-size: inherit;
     margin-left: 1em;
     margin-bottom: .5em;
+    display:none;
   }
   #pains q {
     display: block;
@@ -285,7 +347,7 @@
     margin-right: 2.75em;
     position: relative;
   }
-  #pains li:after, #pains li:before {
+  #pains li:after {
     content: "\3009";
     display: block;
     position: absolute;
@@ -299,9 +361,12 @@
     line-height: 140%;
     overflow: visible;
   }
-  #pains li:hover:after,
-  #pains li:hover:before {
+  #pains li:hover:after {
     opacity: 1.0;
+  }
+  #pains li.open:after {
+    opacity: 1.0;
+    -webkit-transform: rotate(90deg) translateY(.2em) translateX(0em);
   }
   #pains q:after {
     content: "\201D";
@@ -309,20 +374,17 @@
   }
   #pains li:nth-child(3n+0) q:before,
   #pains li:nth-child(3n+0) cite,
-  #pains li:nth-child(3n+0):after,
-  #pains li:nth-child(3n+0):before{
+  #pains li:nth-child(3n+0):after {
     color: #00C12A;
   }
   #pains li:nth-child(3n+1) q:before,
   #pains li:nth-child(3n+1) cite,
-  #pains li:nth-child(3n+1):after,
-  #pains li:nth-child(3n+1):before {
+  #pains li:nth-child(3n+1):after {
     color: #FEBD25;
   }
   #pains li:nth-child(3n+2) q:before,
   #pains li:nth-child(3n+2) cite,
-  #pains li:nth-child(3n+2):after,
-  #pains li:nth-child(3n+2):before {
+  #pains li:nth-child(3n+2):after {
     color: #0091D4;
   }
   </style>
@@ -352,6 +414,15 @@
     <p class="identifiers">My name is <input type="text" class="name"/> from <input type="text" placeholder="zip code" class="zip"></p>
     <button class="post">post your edpain</button>
   </section>
+  <section id="painSharing">
+    <q>There is not enough technology in my school</q>
+    <button class="twitter">tweet it</button> <button class="facebook">facebook it</button>
+    <p>May we contact you?</p>
+    <input type="text" class="email" placeholder="email"></input>
+    <button>yes</button>
+    <button>and send me updates</button>
+    <button class="back">another edpain?</button>
+  </section>
   <section id="pains">
     <h2>edpains</h2>
     <ul>
@@ -363,7 +434,7 @@
         <q>Too many sites are blocked in my school. I hate how they don't trust us.</q>
         <cite>Jane Doe - student from Washington, DC</cite>
       </li>
-      <li>
+      <li class="open">
         <q>I buy technology for my teachers and they don't seem to use it.</q>
         <cite>Lisa Smith - principal from New York City, NY</cite>
       </li>
