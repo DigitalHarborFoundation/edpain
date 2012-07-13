@@ -280,29 +280,22 @@
   }
   #pains li {
     clear: both;
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
     margin-right: 2em;
     position: relative;
   }
   #pains li:after, #pains li:before {
-    content: "";
+    content: "\3009";
     display: block;
     position: absolute;
-    right: -1em;
-    top: 50%;
-    height: .25em;
-    -webkit-transform: rotate(45deg);
-    -webkit-transform-origin: 1em 0em 0;
-    background: #333;
-    width: 1em;
-    opacity: .5;
-    border-right:1px solid;
-  }
-  #pains li:before {
-    -webkit-transform: translateX(-.25em) translateY(-.25em) rotate(-45deg);
-    -webkit-transform-origin: 1em .25em 0;
-    width: .75em;
-    border-bottom: 1px solid;
+    right: -1.25em;
+    top: 0;
+    font-size: 200%;
+    opacity: .3;
+    height: 100%;
+    vertical-align:center;
+    font-weight: 800;
+    line-height: 140%;
   }
   #pains li:hover:after,
   #pains li:hover:before {
@@ -313,31 +306,22 @@
     color: black;
   }
   #pains li:nth-child(3n+0) q:before,
-  #pains li:nth-child(3n+0) cite{
+  #pains li:nth-child(3n+0) cite,
+  #pains li:nth-child(3n+0):after,
+  #pains li:nth-child(3n+0):before{
     color: #00C12A;
   }
-  #pains li:nth-child(3n+0):after,
-  #pains li:nth-child(3n+0):before {
-    background-color: #00C12A;
-    border-color: #00C12A;
-  }
   #pains li:nth-child(3n+1) q:before,
-  #pains li:nth-child(3n+1) cite {
-    color: #FEBD25;
-  }
+  #pains li:nth-child(3n+1) cite,
   #pains li:nth-child(3n+1):after,
   #pains li:nth-child(3n+1):before {
-    background-color: #FEBD25;
-    border-color: #FEBD25;
+    color: #FEBD25;
   }
   #pains li:nth-child(3n+2) q:before,
-  #pains li:nth-child(3n+2) cite {
-    color: #0091D4;
-  }
+  #pains li:nth-child(3n+2) cite,
   #pains li:nth-child(3n+2):after,
   #pains li:nth-child(3n+2):before {
-    background-color: #0091D4;
-    border-color: #0091D4;
+    color: #0091D4;
   }
   </style>
   <script type="template/jquery" id="painDisplayTemplate">
