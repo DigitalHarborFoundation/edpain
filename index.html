@@ -57,6 +57,7 @@
           .fadeIn('slow');
       pain.fadeOut('slow', function() { 
         pain.find("textarea").val("");
+        showPostButton();
         pain.fadeIn('slow');
       });
     };
@@ -69,6 +70,14 @@
     };
     resizeEntry();
     $(window).on('resize',resizeEntry);
+    var pains = $("#pains");
+    var painsScale = 20.0;
+    var win = $(window);
+    var resizePains = function() {
+      pains.css('font-size', win.width()/painsScale);
+    };
+    resizePains();
+    $(window).on('resize',resizePains);
   });
   </script>
   <style>
@@ -237,30 +246,37 @@
   }
   #pains {
     text-align:left;
+    font-size: 48pt;
   }
   #pains h2 {
     color: #27a9e0;
-    font-size: 48pt;
+    font-size: inherit;
     margin-left: 1em;
     margin-bottom: .5em;
   }
   #pains q {
     display: block;
     color: black;
-    font-size: 48pt;
+    font-size: inherit;
+    margin-left: 2.5em;
   }
   #pains cite {
-    font-size: 24pt;
+    display:block;
+    font-size: 50%;
+    margin-left: 5em;
   }
   #pains q:before {
     content: "\201C";
     display:inline-block;
     margin-right: .15em;
-    font-size: 180pt;
+    font-size: 375%;
     float: left;
-    font-weight: 800;
+    position:absolute;
+    left:.25em;
+    top:-.137em;
+    font-weight: 800;/*
     margin-top: -.137em;
-    margin-left: .25em;
+    margin-left: .25em;*/
   }
   #pains li {
     clear: both;
