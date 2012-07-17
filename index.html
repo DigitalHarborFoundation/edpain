@@ -87,12 +87,8 @@
       win.on('resize',resize);
     }
     fontResizer($("#painEntry"), 40.0);
-    fontResizer($("#pains"), 20.0);
+    fontResizer($("#pains"), 22.0);
     fontResizer($("#painSharing"), 40.0);
-    $('#painEntry').waypoint(function(event,dir) {
-      console.log("painEntry -> " + dir === "down")
-      $('#painEntryShortcut').toggleClass('sticky', dir === "down");
-    }, {offset: -$('#painEntry').outerHeight()+20});
     $("#painEntryShortcut").click(function() {
       anotherPain();
     });
@@ -358,6 +354,8 @@
     font-size: 48pt;
     overflow: visible;
     margin-top: 1em;
+    width: 21em;
+    margin-left: .5em;
   }
   #pains h2 {
     color: #27a9e0;
@@ -436,12 +434,25 @@
   #pains li:nth-child(3n+2):after {
     color: #0091D4;
   }
-  /*
-  .sticky {
-    position: fixed !important;
-    top: 0 !important;
-    float: left;
-  }*/
+  body > footer {
+      position: fixed;
+      bottom:0;
+      width: 100%;
+      box-shadow: -5px 0px 25px white;
+      padding: .25em;
+      font-size: 150%;
+      color: #FEBD25;
+  }
+  body > footer section:after {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 2em;
+    left: 0;
+    opacity: 2.0;
+    background: white;
+    opacity: .6;
+  }
   </style>
   <script type="template/jquery" id="painDisplayTemplate">
   <li>
@@ -465,13 +476,11 @@
   </section>
   <section id="painEntry">
     <p>I'm a<span class="pluralRole">n</span> <input type="text" class="role" placeholder="teacher, student, parent, etc."/> and I have an <strong>edpain</strong>:</p>
-    <p class="description"><textarea></textarea></p>
+    <p class="description"><textarea ></textarea></p>
     <p class="identifiers">My name is <input type="text" class="name"/> from <input type="text" placeholder="zip code" class="zip"></p>
     <button class="post">post your edpain</button>
   </section>
   <section id="painSharing">
-    <q>There is not enough technology in my school</q>
-    <button class="twitter">tweet it</button> <button class="facebook">facebook it</button>
     <input type="text" class="email" placeholder="email"></input>
     <button class="connect">stay connected</button>
   </section>
@@ -497,5 +506,10 @@
       </li>
     </ul>
   </section>
+  <footer>
+    <section id="shareButton">
+      share your pain
+    </section>
+  </footer>
 </body>
 </html>
