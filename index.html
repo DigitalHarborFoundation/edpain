@@ -70,6 +70,21 @@
     var painExtraTemplate = _.template($("#painExtraTemplate").text());
     var pain = $("#painEntry");
     var share = $("#postPainEntry");
+    var togglePainOpen = function(el) {
+      var extra = el.data("extra");
+      if (el.hasClass("open")) {
+        if (extra) {
+          extra.remove();
+        }
+      }
+      else {
+        var tmpl = $(painExtraTemplate());
+        el.append(tmpl).data("extra", tmpl);
+        tmpl.hide().fadeIn("slow");
+        forceReset();
+      }
+      el.toggleClass("open");
+    }
     var extractPain = function() {
       var data = {
         role: pain.find(".role").val(),
@@ -77,10 +92,11 @@
         name: pain.find(".name").val(),
         zip: pain.find(".zip").val() 
       }
-      $(painDisplayTemplate(data))
+      var newPain = $(painDisplayTemplate(data))
           .prependTo($("#pains ul"))
           .hide()
           .fadeIn('slow');
+      togglePainOpen(newPain);
       pain.fadeOut('slow', function() { 
         share.fadeIn('slow');
       });
@@ -113,20 +129,7 @@
       return -$this.outerHeight() + $this.find(".back").outerHeight();
     }});
     $("#pains").on("click", "li", function() {
-      var el = $(this);
-      var extra = el.data("extra");
-      if (el.hasClass("open")) {
-        if (extra) {
-          extra.remove();
-        }
-      }
-      else {
-        var tmpl = $(painExtraTemplate());
-        el.append(tmpl).data("extra", tmpl);
-        tmpl.hide().fadeIn("slow");
-        forceReset();
-      }
-      el.toggleClass("open");
+      togglePainOpen($(this));
     });
     $("#pains").on("click", "button", function(e) {
       e.stopPropagation();
@@ -312,10 +315,25 @@
   #pains li button {
     font-size: 65%;
     background-color: #0091D4;
+    opacity: 0.8;
+  }
+  #pains li button:hover {
+    opacity: 1.0;
   }
   #pains li button.twitter {
     clear:both;
     margin-left:4em;
+  }
+  #pains li a {
+    font-size: 35%;
+    display: block;
+    margin-top: -1.25em;
+    float:right;
+    margin-right: 5em;
+    text-decoration: none;
+  }
+  #pains li a:hover {
+    text-decoration: underline;
   }
   #postPainEntry button.sticky {
     position: fixed;
@@ -355,9 +373,13 @@
     cursor: pointer;
   }
   #painEntry .post:active,
-  #postPainEntry button:active {
+  #postPainEntry button:active,
+  #pains button:active {
     color: #DDD;
     box-shadow: 2px 2px 2px #AAA inset;
+    position:relative;
+    left:2px;
+    top:2px;
   }
   #postPainEntry {
     text-align: center;
@@ -476,7 +498,7 @@
   }
   #pains li.open:after {
     opacity: 1.0;
-    -webkit-transform: rotate(90deg) translateY(.2em) translateX(0em);
+    -webkit-transform: rotate(90deg) translateY(.7em) translateX(-.45em);
   }
   #pains q:after {
     content: "\201D";
@@ -484,33 +506,37 @@
   }
   #pains li:nth-child(3n+0) q:before,
   #pains li:nth-child(3n+0) cite,
-  #pains li:nth-child(3n+0):after {
-    color: #00C12A;
+  #pains li:nth-child(3n+0):after, 
+  #pains li:nth-child(3n+0) a {
+    color: #FEBD25;
   }
   #pains li:nth-child(3n+0) button {
-    background-color: #00C12A;
+    background-color: #FEBD25;
   }
   #pains li:nth-child(3n+1) q:before,
   #pains li:nth-child(3n+1) cite,
-  #pains li:nth-child(3n+1):after {
-    color: #FEBD25;
+  #pains li:nth-child(3n+1):after, 
+  #pains li:nth-child(3n+1) a {
+    color: #0091D4;
   }
   #pains li:nth-child(3n+1) button {
-    background-color: #FEBD25;
+    background-color: #0091D4;
   }
   #pains li:nth-child(3n+2) q:before,
   #pains li:nth-child(3n+2) cite,
-  #pains li:nth-child(3n+2):after {
-    color: #0091D4;
+  #pains li:nth-child(3n+2):after, 
+  #pains li:nth-child(3n+2) a {
+    color: #00C12A;
   }
   #pains li:nth-child(3n+2) button {
-    background-color: #0091D4;
+    background-color: #00C12A;
   }
   </style>
   <script type="template/jquery" id="painDisplayTemplate">
   <li>
     <q><%=pain %></q>
     <cite><%=name %> &mdash; <%=role%> from <%=zip%></cite>
+    <a href="http://edpain.digitalharborfoundation.org/pains/1234">permalink</a>
   </li>
   </script>
   <script type="template/jquery" id="painExtraTemplate">
@@ -560,14 +586,17 @@
       <li>
         <q>There is not enough technology in my school</q>
         <cite>John Smith - student from Baltimore, MD</cite>
+        <a href="http://edpain.digitalharborfoundation.org/pains/1234">permalink</a>
       </li>
       <li>
         <q>Too many sites are blocked in my school. I hate how they don't trust us.</q>
         <cite>Jane Doe - student from Washington, DC</cite>
+        <a href="http://edpain.digitalharborfoundation.org/pains/1234">permalink</a>
       </li>
       <li>
         <q>I buy technology for my teachers and they don't seem to use it.</q>
         <cite>Lisa Smith - principal from New York City, NY</cite>
+        <a href="http://edpain.digitalharborfoundation.org/pains/1234">permalink</a>
       </li>
     </ul>
   </section>
