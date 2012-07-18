@@ -38,6 +38,7 @@
     fontResizer($("#painEntry"), 37.0);
     fontResizer($("#pains"), 22.0);
     fontResizer($("#postPainEntry"), 40.0);
+    fontResizer($("body > header"), 60.0);
     
     $("#painEntry .role").keyup(function() {
       var val = $(this).val();
@@ -184,7 +185,7 @@
   }
   #anchorLogo {
     word-wrap: nowrap;
-    font-size: 14pt;
+    font-size: inherit;
     background-image: url('EdTechLinkAnchor.svg');
     background-position: right top;
     background-size: auto 100%;
