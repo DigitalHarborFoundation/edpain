@@ -74,13 +74,22 @@
     var geocoder = new google.maps.Geocoder();
     $.zipToCityState = function(zip, target) {
       var t = $("#" + target);
-      geocoder.geocode({ 'address': zip + ", USA"}, function(results, status) {
+      geocoder.geocode({ 'address': zip}, function(results, status) {
+        console.log(results);
         if (results) {
-          t.replaceWith(results[0].address_components[1].long_name + ", " + results[0].address_components[2].short_name);
+          for (var i = 0; i < results.length;i++) {
+            if (results[i].types[0] == "postal_code") {
+              var a = results[i].formatted_address;
+              //strip off zip and country if USA
+              if (a.indexOf(zip + ", USA") >= 0) {
+                a = a.substr(0,a.indexOf(zip)-1);
+              }
+              t.replaceWith(a);
+              return;
+            }
+          }
         }
-        else {
-          t.replaceWith(zip);
-        }
+        t.replaceWith(zip);
       });
     };
     
@@ -108,7 +117,7 @@
       var data = {
         role: pain.find(".role").val(),
         'pain': pain.find("textarea").val(),
-        name: name ? name : "Anonymous",
+        name: name ? name : "",
         zip: pain.find(".zip").val() 
       }
       var newPain = $(painDisplayTemplate(data))
