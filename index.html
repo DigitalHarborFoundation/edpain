@@ -15,6 +15,15 @@
   <script src="jquery.fittext.js"></script>
   <script>
   $(function() {
+    var forceReset = function() {
+      var body = $("body");
+      if (body.css("-webkit-transform") == "translateZ(1px)") {
+        body.css("-webkit-transform","none");
+      }
+      else {
+        body.css("-webkit-transform",'translateZ(1px)');
+      }
+    };
     var win = $(window);
     var fontResizer = function($el, scale) {
       var resize = function() {
@@ -58,6 +67,7 @@
     $("#painEntry textarea").keyup(showPostButton).blur(showPostButton);
     
     var painDisplayTemplate = _.template($("#painDisplayTemplate").text());
+    var painExtraTemplate = _.template($("#painExtraTemplate").text());
     var pain = $("#painEntry");
     var share = $("#postPainEntry");
     var extractPain = function() {
@@ -102,6 +112,25 @@
       var $this = $(this);
       return -$this.outerHeight() + $this.find(".back").outerHeight();
     }});
+    $("#pains").on("click", "li", function() {
+      var el = $(this);
+      var extra = el.data("extra");
+      if (el.hasClass("open")) {
+        if (extra) {
+          extra.remove();
+        }
+      }
+      else {
+        var tmpl = $(painExtraTemplate());
+        el.append(tmpl).data("extra", tmpl);
+        tmpl.hide().fadeIn("slow");
+        forceReset();
+      }
+      el.toggleClass("open");
+    });
+    $("#pains").on("click", "button", function(e) {
+      e.stopPropagation();
+    });
   });
   </script>
   <style>
@@ -262,7 +291,8 @@
     margin-right: 0;
   }
   #painEntry .post,
-  #postPainEntry button {
+  #postPainEntry button,
+  #pains li button {
     color: white;
     background-color: #00C12A;
     font-family: "GeosansLight";
@@ -278,6 +308,14 @@
     box-shadow: 2px 2px 2px #AAA;
     cursor: pointer;
     width: 10.5em;
+  }
+  #pains li button {
+    font-size: 65%;
+    background-color: #0091D4;
+  }
+  #pains li button.twitter {
+    clear:both;
+    margin-left:4em;
   }
   #postPainEntry button.sticky {
     position: fixed;
@@ -449,39 +487,24 @@
   #pains li:nth-child(3n+0):after {
     color: #00C12A;
   }
+  #pains li:nth-child(3n+0) button {
+    background-color: #00C12A;
+  }
   #pains li:nth-child(3n+1) q:before,
   #pains li:nth-child(3n+1) cite,
   #pains li:nth-child(3n+1):after {
     color: #FEBD25;
+  }
+  #pains li:nth-child(3n+1) button {
+    background-color: #FEBD25;
   }
   #pains li:nth-child(3n+2) q:before,
   #pains li:nth-child(3n+2) cite,
   #pains li:nth-child(3n+2):after {
     color: #0091D4;
   }
-  body > footer {
-      position: fixed;
-      bottom:0;
-      width: 100%;
-      box-shadow: -5px 0px 25px white;
-      padding: .25em;
-      font-size: 150%;
-      color: #FEBD25;
-  }
-  body > footer section:before {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 2em;
-    left: 0;
-    opacity: 2.0;
-    background: red;
-  }
-  body > footer {
-    display: none;
-  }
-  body > footer.showing {
-    display: block;
+  #pains li:nth-child(3n+2) button {
+    background-color: #0091D4;
   }
   </style>
   <script type="template/jquery" id="painDisplayTemplate">
@@ -489,6 +512,12 @@
     <q><%=pain %></q>
     <cite><%=name %> &mdash; <%=role%> from <%=zip%></cite>
   </li>
+  </script>
+  <script type="template/jquery" id="painExtraTemplate">
+  <div class="painExtra">
+    <button class="twitter">tweet it</button>
+    <button class="facebook">facebook it</button>
+  </div>
   </script>
 </head>
 <body>
@@ -536,16 +565,11 @@
         <q>Too many sites are blocked in my school. I hate how they don't trust us.</q>
         <cite>Jane Doe - student from Washington, DC</cite>
       </li>
-      <li class="open">
+      <li>
         <q>I buy technology for my teachers and they don't seem to use it.</q>
         <cite>Lisa Smith - principal from New York City, NY</cite>
       </li>
     </ul>
   </section>
-  <footer>
-    <section id="shareButton">
-      share your edpain
-    </section>
-  </footer>
 </body>
 </html>
