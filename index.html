@@ -8,7 +8,6 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.5.1/build/cssreset/cssreset-min.css">
   <!--script src="http://code.jquery.com/jquery-1.7.2.min.js"></script-->
-  <!--script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script-->
   <script src="jquery.min.js"></script>
   <script src="underscore-min.js"></script>
   <script src="waypoints.min.js"></script>
@@ -87,10 +86,11 @@
       el.toggleClass("open");
     }
     var extractPain = function() {
+      var name = pain.find(".name").val();
       var data = {
         role: pain.find(".role").val(),
         'pain': pain.find("textarea").val(),
-        name: pain.find(".name").val(),
+        name: name ? name : "Anonymous",
         zip: pain.find(".zip").val() 
       }
       var newPain = $(painDisplayTemplate(data))
