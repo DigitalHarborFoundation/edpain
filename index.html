@@ -12,8 +12,10 @@
   <script src="underscore-min.js"></script>
   <script src="waypoints.min.js"></script>
   <script src="jquery.fittext.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
   <script>
   $(function() {
+    //force chrome to reset (some problems below when inserting content)
     var forceReset = function() {
       var body = $("body");
       if (body.css("-webkit-transform") == "translateZ(1px)") {
@@ -23,11 +25,12 @@
         body.css("-webkit-transform",'translateZ(1px)');
       }
     };
+    //reflexive layout based on em's
     var win = $(window);
     var fontResizer = function($el, scale) {
       var resize = function() {
         $el.css('font-size', win.width()/scale);
-      }
+      };
       resize();
       win.on('resize',resize);
     }
@@ -39,6 +42,7 @@
     fontResizer($("#postPainEntry"), 40.0);
     fontResizer($("body > header"), 60.0);
     
+    //anal a/an solution
     $("#painEntry .role").keyup(function() {
       var val = $(this).val();
       if (val && (val.length > 0) && ($.inArray(val.substr(0,1).toLowerCase(), ["a","e", "i", "o", "u"]) >= 0)) {
@@ -48,6 +52,7 @@
         $("#painEntry .pluralRole").css("visibility", "hidden");
       }
     });
+    
     var showPostButton = function() {
       var role = $("#painEntry .role").val();
       var pain = $("#painEntry textarea").val();
@@ -65,6 +70,19 @@
     };
     $("#painEntry .role").keyup(showPostButton).blur(showPostButton);
     $("#painEntry textarea").keyup(showPostButton).blur(showPostButton);
+    
+    var geocoder = new google.maps.Geocoder();
+    $.zipToCityState = function(zip, target) {
+      var t = $("#" + target);
+      geocoder.geocode({ 'address': zip + ", USA"}, function(results, status) {
+        if (results) {
+          t.replaceWith(results[0].address_components[1].long_name + ", " + results[0].address_components[2].short_name);
+        }
+        else {
+          t.replaceWith(zip);
+        }
+      });
+    };
     
     var painDisplayTemplate = _.template($("#painDisplayTemplate").text());
     var painExtraTemplate = _.template($("#painExtraTemplate").text());
@@ -97,6 +115,7 @@
           .prependTo($("#pains ul"))
           .hide()
           .fadeIn('slow');
+      $.zipToCityState(data.zip, "zipTarget");
       togglePainOpen(newPain);
       pain.fadeOut('slow', function() { 
         share.fadeIn('slow');
@@ -536,7 +555,7 @@
   <script type="template/jquery" id="painDisplayTemplate">
   <li>
     <q><%=pain %></q>
-    <cite><%=name %> &mdash; <%=role%> from <%=zip%></cite>
+    <cite><%=name %> &mdash; <%=role%> from <span id="zipTarget"><%= zip %></span></cite>
     <a href="http://edpain.digitalharborfoundation.org/pains/1234">permalink</a>
   </li>
   </script>
