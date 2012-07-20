@@ -160,7 +160,43 @@
     $("#pains").on("click", "li", function() {
       togglePainOpen($(this));
     });
-    $("#pains").on("click", "button", function(e) {
+    var getTwitterShareUrl = function(text, permalink) {
+      var url = "https://twitter.com/intent/tweet";
+      url += "?url=" + encodeURI(permalink);
+      // add #edpain to front and quote it (or end ellipses)
+      url += "&text=" + "%23edpain%20%E2%80%9C" + (text.length <= 109 ? (text + '%E2%80%9D') : (text.substr(0,109) + "%E2%80%A6"));
+      return url;
+    };
+    $("#pains").on("click", "button.twitter", function(e) {
+      var li = $(this).closest("li");
+      var text = li.find("q").text();
+      var permalink = li.find("a").attr("href");
+      var url = getTwitterShareUrl(text, permalink);
+    	var newwindow = window.open(url);
+    	if (window.focus) { 
+    	  newwindow.focus();
+    	}
+      e.stopPropagation();
+    });
+    var getFacebookShareUrl = function(text, permalink) {
+      var url = "http://www.facebook.com/dialog/feed";
+      url += "?link=" + encodeURI(permalink);
+      url += "&app_id=366391053434145"
+      url += "&name=%23edpain";
+      url += "&picture=" + encodeURI("http://www.digitalharborfoundation.org/dhf_logo.png");
+      url += "&redirect_uri=" +  encodeURI("https://edpain.digitalharborfoundation.org");
+      url += "&description=" + (text.length <= 109 ? (text + '%E2%80%9D') : (text.substr(0,109) + "%E2%80%A6"));
+      return url;
+    };
+    $("#pains").on("click", "button.facebook", function(e) {
+      var li = $(this).closest("li");
+      var text = li.find("q").text();
+      var permalink = li.find("a").attr("href");
+      var url = getFacebookShareUrl(text, permalink);
+    	var newwindow = window.open(url);
+    	if (window.focus) { 
+    	  newwindow.focus();
+    	}
       e.stopPropagation();
     });
   });
@@ -228,10 +264,7 @@
     font-family: "helvetica";
     font-weight: 800;
     color: transparent;
-    text-shadow: .01em .01em .01em #27a9e0, .005em .005em .005em #176586, .01em .01em 0px #27a9e0;
-    /*
-    text-shadow: 2px 2px 2px #27a9e0, 1px 1px 1px #176586, 2px 2px 0px #27a9e0;
-    */
+    text-shadow: .01em .01em .01em #27a9e0, .005em .005em .005em #176586, .01em .01em 0 #27a9e0;
   }
   #subHeader p {
     text-align: middle;
@@ -568,7 +601,6 @@
   <li>
     <q><%=pain %></q>
     <cite><%=name %> &mdash; <%=role%> from <span id="zipTarget"><%= zip %></span></cite>
-    <a href="http://edpain.digitalharborfoundation.org/pains/1234">permalink</a>
   </li>
   </script>
   <script type="template/jquery" id="painExtraTemplate">
@@ -597,7 +629,7 @@
   </section>
   <section id="painEntry">
     <p>I'm a<span class="pluralRole">n</span> <input type="text" class="role" placeholder="teacher, student, parent, etc."/> and I have an <strong>#edpain</strong>:</p>
-    <p class="description"><textarea ></textarea></p>
+    <p class="description"><textarea maxlength="300"></textarea></p>
     <p class="identifiers">My name is <input type="text" class="name"/> from <input type="text" placeholder="zip code" class="zip"></p>
     <button class="post">post your edpain</button>
   </section>
