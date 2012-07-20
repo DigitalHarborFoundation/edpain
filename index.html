@@ -56,8 +56,9 @@
     var showPostButton = function() {
       var role = $("#painEntry .role").val();
       var pain = $("#painEntry textarea").val();
+      var zip = $("#painEntry .zip").val();
       var post = $("#painEntry .post");
-      if (role && pain && role.length > 0 && pain.length >= 3) {
+      if (role && pain && zip && role.length > 0 && pain.length >= 3 && zip.length == 5 && Number(zip) != NaN && pain.length <= 300) {
         if (post.css("visibility") == "hidden") {
           post.hide()
             .css("visibility", "visible")
@@ -70,6 +71,7 @@
     };
     $("#painEntry .role").keyup(showPostButton).blur(showPostButton);
     $("#painEntry textarea").keyup(showPostButton).blur(showPostButton);
+    $("#painEntry .zip").keyup(showPostButton).blur(showPostButton);
     
     var geocoder = new google.maps.Geocoder();
     $.zipToCityState = function(zip, target) {
@@ -603,9 +605,9 @@
     <span id="preLogo">&nbsp;</span>
     <a href="http://www.digitalharborfoundation.org"><img src="smallDHFLogo.svg" alt="Digital Harbor Foundation" class="smallLogo"></a>
     <span id="postLogo">project</span>
-    <div id="anchorLogo">
+    <a href="http://www.edtechlink.org/"><div id="anchorLogo">
       We link learners to doers
-    </div>
+    </div></a>
   </header>
   <section id="subHeader">
     <h1>#edpain</h1>
@@ -618,13 +620,11 @@
     <p>I'm a<span class="pluralRole">n</span> <input type="text" class="role" placeholder="teacher, student, parent, etc."/> and I have an <a href="https://twitter.com/#!/search/%23edpain" target="_blank">#edpain</a>:</p>
     <p class="description"><textarea maxlength="300"></textarea></p>
     <p class="identifiers">My name is <input type="text" class="name"/> from <input type="text" placeholder="zip code" class="zip"></p>
-    <p>and I agree to share this <a href="https://twitter.com/#!/search/%23edpain" target="_blank">#edpain</a> under the <a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 license</a>.</p>
+    <p>and I agree to share my <a href="https://twitter.com/#!/search/%23edpain" target="_blank">#edpain</a> under the <a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 license</a>.</p>
     <button class="post">post your edpain</button>
   </section>
   <section id="postPainEntry">
     <p>Thank you for sharing your #edpain.</p>
-    <!--input type="text" class="email" placeholder="email"></input>
-    <button class="connect">stay connected</button-->
     <button class="back">Have another edpain?</button>
   </section>
   <section id="pains">

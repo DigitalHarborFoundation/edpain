@@ -2,7 +2,8 @@
   "name": "edpain",
   "version": "0.0.1",
   "dependencies": {
-    "express": "latest"
+    "express": "latest",
+    "mongodb": "1.1.0"
   },
   "engines": {
     "node": "0.6.x"
