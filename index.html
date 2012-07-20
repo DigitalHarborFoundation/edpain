@@ -148,18 +148,16 @@
     };
     $("#painEntry .post").click(extractPain);
     $("#postPainEntry .back").click(anotherPain);
-    $("#painEntryShortcut").click(function() {
-      anotherPain();
-    });
-    $("#postPainEntry").waypoint(function(e,dir) {
-      $(this).find(".back").toggleClass("sticky", dir === "down");
-    }, { offset: function() {
-      var $this = $(this);
-      return -$this.outerHeight() + $this.find(".back").outerHeight();
-    }});
     $("#pains").on("click", "li", function() {
       togglePainOpen($(this));
     });
+    
+    // add sticky class (for fixed) when have another 
+    // edpain button goes out of the window
+    $("#postPainEntry .back").waypoint(function(e,dir) {
+      $(this).toggleClass("sticky", dir === "down");
+    });
+    
     var getTwitterShareUrl = function(text, permalink) {
       var url = "https://twitter.com/intent/tweet";
       url += "?url=" + encodeURI(permalink);
@@ -303,8 +301,8 @@
     color: #AAA;
     text-align: center;
   }
-  #painEntry input::-moz-placeholder,
-  #postPainEntry input::-moz-placeholder {
+  #painEntry input:-moz-placeholder,
+  #postPainEntry input:-moz-placeholder {
     color: #AAA;
     text-align: center;
   }
@@ -331,8 +329,9 @@
   #painEntry .pluralRole {
     visibility:hidden;
   }
-  #painEntry strong {
+  #painEntry a {
     color: #27a9e0;
+    text-decoration: none;
   }
   #painEntry p {
     margin-bottom: .5em;
@@ -364,13 +363,12 @@
     color: white;
     background-color: #00C12A;
     font-family: "GeosansLight";
-    font-weight: 800;
     border: 0;
     padding:0;
     margin:0;
     font-size:inherit;
-    padding-top: .10em;
-    padding-bottom: .30em;
+    padding-top: .20em;
+    padding-bottom: .20em;
     margin-bottom: 1em;
     border-radius:3px;
     box-shadow: 2px 2px 2px #AAA;
@@ -414,29 +412,6 @@
   #painEntry .post:hover {
     background-color: #27a9e0;
   }
-  #painEntryShortcut {
-    display: none;
-    position: fixed;
-    right: 4em;
-    top: 0;
-    padding-left: .5em;
-    padding-right: .5em;
-    padding-top: .25em;
-    padding-bottom: .25em;
-    opacity: 0.8;
-    width: 8em;
-    background-color: #FEBD25;
-    color: white;
-    border-radius: 0px 0px 3px 3px;
-    opacity: .6;
-    font-size: 120%;
-    font-weight: 800;
-    z-index: 3;
-  }
-  #painEntryShortcut:hover {
-    opacity:1.0;
-    cursor: pointer;
-  }
   #painEntry .post:active,
   #postPainEntry button:active,
   #pains button:active {
@@ -452,6 +427,7 @@
     margin-right: auto;
     display: none;
     width: 26em;
+    height: 8em;
   }
   #postPainEntry p {
     margin-top: 1.5em;
@@ -552,18 +528,27 @@
     top: 0;
     font-size: 200%;
     opacity: .3;
-    height: 100%;
-    vertical-align:center;
     font-weight: 800;
-    line-height: 140%;
     overflow: visible;
+    transition: all .25s ease-in-out;
+    -webkit-transition: all .25s ease-in-out;
+    -moz-transition: all .25s ease-in-out;
+    -o-transition: all .25s ease-in-out;
+    -ms-transition: all .25s ease-in-out;
   }
   #pains li:hover:after {
     opacity: 1.0;
   }
   #pains li.open:after {
     opacity: 1.0;
-    -webkit-transform: rotate(90deg) translateY(.7em) translateX(-.45em);
+    transform: rotate(90deg);
+    transform-origin: 40% 50% 0;
+    -webkit-transform: rotate(90deg);
+    -webkit-transform-origin: 40% 50% 0;
+    -moz-transform: rotate(90deg);
+    -moz-transform-origin: 40% 50% 0;
+    -ms-transform: rotate(90deg);
+    -ms-transform-origin: 40% 50% 0;
   }
   #pains q:after {
     content: "\201D";
@@ -628,9 +613,10 @@
     <p>This wall is an open platform for teachers, administrators, policy makers, and technologists to constructively identify pain points in education that need solving. Let's share what stands between us and great education.</p>
   </section>
   <section id="painEntry">
-    <p>I'm a<span class="pluralRole">n</span> <input type="text" class="role" placeholder="teacher, student, parent, etc."/> and I have an <strong>#edpain</strong>:</p>
+    <p>I'm a<span class="pluralRole">n</span> <input type="text" class="role" placeholder="teacher, student, parent, etc."/> and I have an <a href="https://twitter.com/#!/search/%23edpain" target="_blank">#edpain</a>:</p>
     <p class="description"><textarea maxlength="300"></textarea></p>
     <p class="identifiers">My name is <input type="text" class="name"/> from <input type="text" placeholder="zip code" class="zip"></p>
+    <p>and I agree to share this <a href="https://twitter.com/#!/search/%23edpain" target="_blank">#edpain</a> under the <a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 license</a>.</p>
     <button class="post">post your edpain</button>
   </section>
   <section id="postPainEntry">
@@ -639,11 +625,6 @@
     <button class="connect">stay connected</button>
     <button class="back">Have another edpain?</button>
   </section>
-  <a href="#painEntry">
-    <section id="painEntryShortcut">
-      Share my edpain
-    </section>
-  </a>
   <section id="pains">
     <h2>edpains</h2>
     <ul>
