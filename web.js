@@ -20,7 +20,7 @@ app.use(function(req,res,next) {
 
 app.get("/json/pains", function(req, res) {
 	mongo.connect(MONGO_URI, {}, function(error, db) {
-	  db.addListener("error", function(error){
+	  db.addListener("error", function(error) {
 	    console.log("Error connecting to MongoLab");
 	  });
 	  db.collection('pains', function(err, coll) {
@@ -31,8 +31,8 @@ app.get("/json/pains", function(req, res) {
       var pains = coll;
 			res.setHeader("Content-Type", "application/json");
 			var cursor;
-			if (req.body.lastDate) {
-				cursor = pains.find({date: { $lt: req.body.lastDate} }).sort({date:-1}).limit(10);
+			if (req.query.lastDate) {
+				cursor = pains.find({date: { $lt: Number(req.query.lastDate)} }).sort({date:-1}).limit(10);
 			} else {
 				cursor = pains.find().sort({date:-1}).limit(10);
 			}
@@ -41,6 +41,7 @@ app.get("/json/pains", function(req, res) {
 					console.log(err);
 					return;
 				}
+				console.log(docs.length);
 		    res.write(JSON.stringify(docs));
 				res.end();
 			});

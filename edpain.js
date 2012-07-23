@@ -105,11 +105,12 @@ $(function() {
   });
   
   //displaying a new pain coming in
-  var addPain = function(data) {
+  var addPain = function(data, isPrepended) {
     return $(painDisplayTemplate(data))
-        .prependTo($("#pains ul"))
+        [isPrepended ? "prependTo" : "appendTo"]($("#pains ul"))
         .hide()
-        .fadeIn('slow');
+        .fadeIn('slow')
+        .data("painData",data);
   };
   var updateServerWithPain = function(data, callback) {
     $.ajax({
@@ -156,8 +157,9 @@ $(function() {
     extractPain(function(painIn) {
       updateServerWithPain(painIn, function(success, painOut) {
         if (success) {
-          var newPain = addPain(painOut);
-          togglePainOpen(newPain);
+          //var newPain = addPain(painOut);
+          //togglePainOpen(newPain);
+//TODO: open relevant pain!
           painEntry.fadeOut('slow', function() { 
             postPainEntry.fadeIn('slow');
           });
@@ -233,27 +235,42 @@ $(function() {
       newwindow.focus();
     }
     e.stopPropagation();
-  });
-  $.ajax({
-    url: "/json/pains",
-    dataType: "json",
-    success: function(data) {
-      for (var i in data) {
-        if (!data[i].cityState) {
-          zipToCityState(data.zip,function(cityState) {
-            data[i].cityState = cityState;
-            addPain(data[i]);
-          });
+  })
+  .waypoint(function(err,dir) {
+    if (this.moreLoading && dir == "down") {
+      return;
+    }
+    this.moreLoading = true;
+    var that = this;
+    var lastEntry = $(this).find("li:last-child").data("painData");
+    $.ajax({
+      url: "/json/pains" + (lastEntry ? ("?lastDate=" + lastEntry.date) : ""),
+      dataType: "json",
+      success: function(data) {
+        if (data.length == 0) {
+          console.log(that);
+          $(that).closest("section").find("p:last-child").html("You have reached the last #edpain");
+          return;
         }
         else {
-          addPain(data[i]);
+          _.each(data, function(pain) {
+            if (!pain.cityState) {
+              zipToCityState(pain.zip,function(cityState) {
+                pain.cityState = cityState;
+                addPain(pain, false);
+              });
+            }
+            else {
+              addPain(pain, false);
+            }
+            that.moreLoading = false;
+          });
         }
       }
-    }
-  });
+    });
+  }, {offset:'bottom-in-view'});
   var socket = io.connect();
   socket.on('newPain', function (data) {
-    console.log(data);
-    addPain(data);
+    addPain(data, true);
   });
 });
