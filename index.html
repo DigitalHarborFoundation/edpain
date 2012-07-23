@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="csrf_token" content="{csrf_token}" />
   <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.5.1/build/cssreset/cssreset-min.css">
   <link rel="stylesheet" type="text/css" href="edpain.css">
   <!--script src="http://code.jquery.com/jquery-1.7.2.min.js"></script-->
@@ -14,19 +15,19 @@
   <script src="waypoints.min.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
   <script src="edpain.js"></script>
-  <script type="template/jquery" id="painDisplayTemplate">
+  <pre id="painDisplayTemplate" class="template">
   <li>
     <q><%=pain %></q>
     <cite><%=name %> &mdash; <%=role%> from <span id="zipTarget"><%= zip %></span></cite>
   </li>
-  </script>
-  <script type="template/jquery" id="painExtraTemplate">
+  </pre>
+  <pre id="painExtraTemplate" class="template">
   <div class="painExtra">
     <a href="http://edpain.digitalharborfoundation.org/pains/1234">permalink</a>
     <button class="twitter">tweet it</button>
     <button class="facebook">facebook it</button>
   </div>
-  </script>
+  </pre>
 </head>
 <body>
   <header>
@@ -45,7 +46,6 @@
     <p>This wall is an open platform for teachers, administrators, policy makers, and technologists to constructively identify <a href="http://www.dailyfinance.com/2011/03/14/buzzword-of-the-week-pain-pointbuzzword-of-the-week-bringing-t/" target="_blank">pain points</a> in education that need solving. Let's share what stands between us and great education.</p>
   </section>
   <section id="painEntry">
-    <input type="hidden" name="_csrf" value="{token}" />
     <p>I'm a<span class="pluralRole">n</span> <input type="text" class="role" placeholder="teacher, student, parent, etc."/> and I have an <a href="https://twitter.com/#!/search/%23edpain" target="_blank">#edpain</a>:</p>
     <p class="description"><textarea maxlength="300"></textarea></p>
     <p class="identifiers">My name is <input type="text" class="name"/> from <input type="text" placeholder="zip code" class="zip"></p>

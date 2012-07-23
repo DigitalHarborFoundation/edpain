@@ -1,0 +1,80 @@
+!!! 5
+html
+  head
+    title #edpain - Digital Harbor Foundation
+    meta(http-equiv='X-UA-Compatible', content='chrome=1')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='apple-mobile-web-app-capable', content='yes')
+    meta(name='apple-mobile-web-app-status-bar-style', content='default')
+    meta(name='csrf_token', content='#{csrf_token}')
+    link(rel='stylesheet', type='text/css', href='http://yui.yahooapis.com/3.5.1/build/cssreset/cssreset-min.css')
+    link(rel='stylesheet', type='text/css', href='edpain.css')
+    script(src='jquery.min.js')
+    script(src='underscore-min.js')
+    script(src='waypoints.min.js')
+    script(src='https://maps.googleapis.com/maps/api/js?sensor=false')
+    script(src='/socket.io/socket.io.js')
+    script(src='edpain.js')
+    != "<script type='template/underscore' id='painDisplayTemplate'>"
+    li
+      q <%=pain %>
+      cite
+        | <%=name %> — <%=role%> from
+        span#zipTarget
+          |  <%= cityState || zip %>
+    != "</script>"
+    != "<script type='template/underscore' id='painExtraTemplate'>"
+      .painExtra
+        a(href='http://edpain.digitalharborfoundation.org/pains/1234') permalink
+        button.twitter tweet it
+        |  
+        button.facebook facebook it
+    != "</script>"
+  body
+    header
+      span#preLogo  
+      a(href='http://www.digitalharborfoundation.org')
+        img.smallLogo(src='smallDHFLogo.svg', alt='Digital Harbor Foundation')
+      span#postLogo project
+      a(href='http://www.edtechlink.org/')
+        #anchorLogo
+          | We link learners to doers
+    section#subHeader
+      h1 #edpain
+      p
+        | identifying the 
+        a(href='http://www.dailyfinance.com/2011/03/14/buzzword-of-the-week-pain-pointbuzzword-of-the-week-bringing-t/', target='_blank') pain points
+        |  of education
+    section#description
+      p
+        | This wall is an open platform for teachers, administrators, policy makers, and technologists to constructively identify 
+        a(href='http://www.dailyfinance.com/2011/03/14/buzzword-of-the-week-pain-pointbuzzword-of-the-week-bringing-t/', target='_blank') pain points
+        |  in education that need solving. Let's share what stands between us and great education.
+    section#painEntry
+      p
+        | I'm a
+        span.pluralRole n
+        input.role(type='text', placeholder='teacher, student, parent, etc.')
+        | and I have an
+        a(href='https://twitter.com/#!/search/%23edpain', target='_blank') #edpain
+        | :
+      p.description
+        textarea(maxlength='300')
+      p.identifiers
+        | My name is
+        input.name(type='text')
+        | from
+        input.zip(type='text', placeholder='zip code')
+      p
+        | and I agree to share my
+        a(href='https://twitter.com/#!/search/%23edpain', target='_blank') #edpain
+        |  under the 
+        a(href='http://creativecommons.org/publicdomain/zero/1.0/', target='_blank') CC0 license
+        | .
+      button.post post your edpain
+    section#postPainEntry
+      p Thank you for sharing your #edpain.
+      button.back Have another edpain?
+    section#pains
+      h2 edpains
+      ul

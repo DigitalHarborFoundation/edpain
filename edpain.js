@@ -13,7 +13,7 @@ $(function() {
   //reflexive layout based on em's
   var win = $(window);
   var fontResizer = function($el, scale) {
-	  //simplified version of fittext.js
+    //simplified version of fittext.js
     var resize = function() {
       $el.css('font-size', win.width()/scale);
     };
@@ -62,10 +62,8 @@ $(function() {
   
   // convert zip code to city, state
   var geocoder = new google.maps.Geocoder();
-  var zipToCityState = function(zip, target) {
-    var t = $("#" + target);
+  var zipToCityState = function(zip, callback) {
     geocoder.geocode({ 'address': zip}, function(results, status) {
-      console.log(results);
       if (results) {
         for (var i = 0; i < results.length;i++) {
           if (results[i].types[0] == "postal_code") {
@@ -74,19 +72,17 @@ $(function() {
             if (a.indexOf(zip + ", USA") >= 0) {
               a = a.substr(0,a.indexOf(zip)-1);
             }
-            t.replaceWith(a);
-            return;
+            callback(a);
           }
         }
       }
-      t.replaceWith(zip);
     });
   };
   
   var painDisplayTemplate = _.template($("#painDisplayTemplate").text());
   var painExtraTemplate = _.template($("#painExtraTemplate").text());
-  var pain = $("#painEntry");
-  var share = $("#postPainEntry");
+  var painEntry = $("#painEntry");
+  var postPainEntry = $("#postPainEntry");
 
   //toggling of pain open/close
   var togglePainOpen = function(el) {
@@ -108,37 +104,80 @@ $(function() {
     togglePainOpen($(this));
   });
   
-  //saving of a pain when posted
-  var extractPain = function() {
-    var name = pain.find(".name").val();
-    var data = {
-      role: pain.find(".role").val(),
-      'pain': pain.find("textarea").val(),
-      name: name ? name : "",
-      zip: pain.find(".zip").val() 
-    }
-    var newPain = $(painDisplayTemplate(data))
+  //displaying a new pain coming in
+  var addPain = function(data) {
+    return $(painDisplayTemplate(data))
         .prependTo($("#pains ul"))
         .hide()
         .fadeIn('slow');
-    zipToCityState(data.zip, "zipTarget");
-    togglePainOpen(newPain);
-    pain.fadeOut('slow', function() { 
-      share.fadeIn('slow');
+  };
+  var updateServerWithPain = function(data, callback) {
+    $.ajax({
+      type: "POST",
+      url:"/json/pains",
+      beforeSend: function(jqXHR) {
+        jqXHR.setRequestHeader('x-csrf-token', $("meta[name='csrf_token']").attr("content"));
+        return true;
+      },
+      'data': JSON.stringify(data),
+      processData: false,
+      contentType: "application/json",
+      dataType: "json",
+      success: function(data) {
+        callback(true, data[0]);
+      },
+      error: function() {
+        callback(false, arguments);
+      }
     });
   };
-  $("#painEntry .post").click(extractPain);
+  // saving of a pain when posted
+  var extractPain = function(callback) {
+    var name = painEntry.find(".name").val();
+    var data = {
+      role: painEntry.find(".role").val(),
+      'pain': painEntry.find("textarea").val(),
+      name: name ? name : "",
+      zip: painEntry.find(".zip").val()
+    };
+    // TODO: optimization: do zip conversion both client 
+    // and server side to speed it up!
+    zipToCityState(data.zip,function(cityState) {
+      data.cityState = cityState;
+      callback(data);
+    });
+  };
+  var postPain = function() {
+    if (this.deactivated) {
+      return;
+    }
+    this.deactivated = true;
+    var that = this;
+    extractPain(function(painIn) {
+      updateServerWithPain(painIn, function(success, painOut) {
+        if (success) {
+          var newPain = addPain(painOut);
+          togglePainOpen(newPain);
+          painEntry.fadeOut('slow', function() { 
+            postPainEntry.fadeIn('slow');
+          });
+        }
+        that.deactivated = false;
+      });
+    });
+  }
+  painEntry.find(".post").on("click",postPain);
 
   //When another pain is desired, reset just the pain and scroll to
   var resetAndScrollToPainEntry = function() {
-    pain.find("textarea").val("");
+    painEntry.find("textarea").val("");
     showPostButton();
     window.scrollTo(0,$("#pains")[0].offsetTop);
-    pain.fadeIn('slow');
+    painEntry.fadeIn('slow');
   };
   var anotherPain = function() {
-    if (share.is(":visible")) {
-      share.fadeOut('slow', function() {
+    if (postPainEntry.is(":visible")) {
+      postPainEntry.fadeOut('slow', function() {
         resetAndScrollToPainEntry();
       });
     }
@@ -146,15 +185,15 @@ $(function() {
       resetAndScrollToPainEntry();
     }
   };
-  $("#postPainEntry .back").click(anotherPain);
+  postPainEntry.find(".back")
+    .click(anotherPain)
+    // add sticky class (for fixed) when have another 
+    // edpain button goes out of the window
+    .waypoint(function(e,dir) {
+      $(this).toggleClass("sticky", dir === "down");
+    });
   
-  // add sticky class (for fixed) when have another 
-  // edpain button goes out of the window
-  $("#postPainEntry .back").waypoint(function(e,dir) {
-    $(this).toggleClass("sticky", dir === "down");
-  });
-  
-	//share via twitter
+  //share via twitter
   var getTwitterShareUrl = function(text, permalink) {
     var url = "https://twitter.com/intent/tweet";
     url += "?url=" + encodeURI(permalink);
@@ -162,18 +201,6 @@ $(function() {
     url += "&text=" + "%23edpain%20%E2%80%9C" + (text.length <= 109 ? (text + '%E2%80%9D') : (text.substr(0,109) + "%E2%80%A6"));
     return url;
   };
-  $("#pains").on("click", "button.twitter", function(e) {
-    var li = $(this).closest("li");
-    var text = li.find("q").text();
-    var permalink = li.find("a").attr("href");
-    var url = getTwitterShareUrl(text, permalink);
-  	var newwindow = window.open(url);
-  	if (window.focus) { 
-  	  newwindow.focus();
-  	}
-    e.stopPropagation();
-  });
-
   //share via facebook
   var getFacebookShareUrl = function(text, permalink) {
     var url = "http://www.facebook.com/dialog/feed";
@@ -185,15 +212,48 @@ $(function() {
     url += "&description=" + (text.length <= 109 ? (text + '%E2%80%9D') : (text.substr(0,109) + "%E2%80%A6"));
     return url;
   };
-  $("#pains").on("click", "button.facebook", function(e) {
+  $("#pains").on("click", "button.twitter", function(e) {
+    var li = $(this).closest("li");
+    var text = li.find("q").text();
+    var permalink = li.find("a").attr("href");
+    var url = getTwitterShareUrl(text, permalink);
+    var newwindow = window.open(url);
+    if (window.focus) { 
+      newwindow.focus();
+    }
+    e.stopPropagation();
+  })
+  .on("click", "button.facebook", function(e) {
     var li = $(this).closest("li");
     var text = li.find("q").text();
     var permalink = li.find("a").attr("href");
     var url = getFacebookShareUrl(text, permalink);
-  	var newwindow = window.open(url);
-  	if (window.focus) { 
-  	  newwindow.focus();
-  	}
+    var newwindow = window.open(url);
+    if (window.focus) { 
+      newwindow.focus();
+    }
     e.stopPropagation();
+  });
+  $.ajax({
+    url: "/json/pains",
+    dataType: "json",
+    success: function(data) {
+      for (var i in data) {
+        if (!data[i].cityState) {
+          zipToCityState(data.zip,function(cityState) {
+            data[i].cityState = cityState;
+            addPain(data[i]);
+          });
+        }
+        else {
+          addPain(data[i]);
+        }
+      }
+    }
+  });
+  var socket = io.connect();
+  socket.on('newPain', function (data) {
+    console.log(data);
+    addPain(data);
   });
 });
