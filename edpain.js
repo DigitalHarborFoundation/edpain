@@ -247,25 +247,23 @@ $(function() {
       url: "/json/pains" + (lastEntry ? ("?lastDate=" + lastEntry.date) : ""),
       dataType: "json",
       success: function(data) {
-        if (data.length == 0) {
-          console.log(that);
-          $(that).closest("section").find("p:last-child").html("You have reached the last #edpain");
-          return;
-        }
-        else {
-          _.each(data, function(pain) {
-            if (!pain.cityState) {
-              zipToCityState(pain.zip,function(cityState) {
-                pain.cityState = cityState;
-                addPain(pain, false);
-              });
-            }
-            else {
+        _.each(data, function(pain) {
+          if (!pain.cityState) {
+            zipToCityState(pain.zip,function(cityState) {
+              pain.cityState = cityState;
               addPain(pain, false);
-            }
-            that.moreLoading = false;
-          });
+            });
+          }
+          else {
+            addPain(pain, false);
+          }
+        });
+        if (data.length < 10) {
+          $(that).closest("section").find("p:last-child").html("You have reached the last #edpain");
         }
+				else {
+        	that.moreLoading = false;
+				}
       }
     });
   }, {offset:'bottom-in-view'});
