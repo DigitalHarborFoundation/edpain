@@ -235,38 +235,41 @@ $(function() {
       newwindow.focus();
     }
     e.stopPropagation();
-  })
-  .waypoint(function(err,dir) {
-    if (this.moreLoading && dir == "down") {
-      return;
-    }
-    this.moreLoading = true;
-    var that = this;
-    var lastEntry = $(this).find("li:last-child").data("painData");
-    $.ajax({
-      url: "/json/pains" + (lastEntry ? ("?lastDate=" + lastEntry.date) : ""),
-      dataType: "json",
-      success: function(data) {
-        _.each(data, function(pain) {
-          if (!pain.cityState) {
-            zipToCityState(pain.zip,function(cityState) {
-              pain.cityState = cityState;
-              addPain(pain, false);
-            });
-          }
-          else {
-            addPain(pain, false);
-          }
-        });
-        if (data.length < 10) {
-          $(that).closest("section").find("p:last-child").html("You have reached the last #edpain");
-        }
-				else {
-        	that.moreLoading = false;
-				}
+  });
+	var appendMorePains = function(callback) {
+  	var lastEntry = $("#pains li:last-child").data("painData");
+	  $.ajax({
+	    url: "/json/pains" + (lastEntry ? ("?lastDate=" + lastEntry.date) : ""),
+	    dataType: "json",
+	    success: function(data) {
+	      _.each(data, function(pain) {
+	        if (!pain.cityState) {
+	          zipToCityState(pain.zip,function(cityState) {
+	            pain.cityState = cityState;
+	            addPain(pain, false);
+	          });
+	        }
+	        else {
+	          addPain(pain, false);
+	        }
+	      });
+				callback(data);
+	    }
+	  });
+  };
+	var footer = $("body > footer");
+	var footerWaypointOpts = {offset: '100%'};
+  footer.waypoint(function(e,dir) {
+		footer.waypoint('remove');
+		appendMorePains(function(data) {
+      if (data.length < 10) {
+        footer.find("p").html("You have reached the last #edpain.");
       }
-    });
-  }, {offset:'bottom-in-view'});
+      else {
+       	footer.waypoint(footerWaypointOpts);
+      }
+		});
+	}, footerWaypointOpts);
   var socket = io.connect();
   socket.on('newPain', function (data) {
     addPain(data, true);
