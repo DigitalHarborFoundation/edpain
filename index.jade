@@ -55,7 +55,7 @@ html
       p
         | I'm a
         span.pluralRole n
-        input.role(type='text', placeholder='teacher, student, parent, etc.')
+        input.role(type='text', placeholder='teacher, student, parent, etc.', maxlength="30")
         | and I have an 
         a(href='https://twitter.com/#!/search/%23edpain', target='_blank') #edpain
         | :
@@ -63,9 +63,9 @@ html
         textarea(maxlength='300')
       p.identifiers
         | My name is
-        input.name(type='text')
+        input.name(type='text', maxlength="50")
         | from
-        input.zip(type='text', placeholder='zip code')
+        input.zip(type='text', placeholder='zip code', maxlength="5")
         |  .
       button.post post your edpain
     section#postPainEntry
