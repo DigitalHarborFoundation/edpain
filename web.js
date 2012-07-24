@@ -13,6 +13,12 @@ app.use(express.bodyParser());
 app.use(express.cookieParser());
 app.use(express.session({ secret: process.env.SESSION_KEY || "takeonlywhatyouneed"}));
 app.use(express.csrf());
+app.use(require("stylus").middleware({
+		debug: true,
+    src: __dirname,
+    dest: __dirname,
+    compress: true
+}));
 app.use(function(req,res,next) {
 	res.locals._csrf = req.session._csrf;
 	next();
