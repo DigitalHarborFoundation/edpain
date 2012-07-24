@@ -59,7 +59,7 @@ app.post("/json/pains", function(req, res) {
 	var pain = req.body;
 	if (!pain.role || !pain.pain || !pain.zip ||
 			pain.role.length > 30 || pain.pain.length > 300 || 
-			pain.zip.length != 5 || Number(pain.zip) == NaN ||
+			pain.zip.length != 5 || isNaN(Number(pain.zip)) ||
 			(pain.name && pain.name.length > 50)) {
 		res.setHeader("Content-Type", "application/json");
 		res.write(JSON.stringify({success:false, errors: ["Error saving edpain."]}));

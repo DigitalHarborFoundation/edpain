@@ -45,7 +45,8 @@ $(function() {
     var pain = $("#painEntry textarea").val();
     var zip = $("#painEntry .zip").val();
     var post = $("#painEntry .post");
-    if (role && pain && zip && role.length > 0 && pain.length >= 3 && zip.length == 5 && Number(zip) != NaN && pain.length <= 300) {
+    if (role && pain && zip && role.length > 0 && pain.length >= 3
+	 		&& zip.length == 5 && !isNaN(Number(zip)) && pain.length <= 300) {
       if (post.css("visibility") == "hidden") {
         post.hide()
           .css("visibility", "visible")
@@ -64,7 +65,7 @@ $(function() {
   var geocoder = new google.maps.Geocoder();
   var zipToCityState = function(zip, callback) {
     geocoder.geocode({ 'address': zip}, function(results, status) {
-      if (results) {
+      if (results && results.length) {
         for (var i = 0; i < results.length;i++) {
           if (results[i].types[0] == "postal_code") {
             var a = results[i].formatted_address;
@@ -76,6 +77,9 @@ $(function() {
           }
         }
       }
+			else {
+				callback(zip);
+			}
     });
   };
   
