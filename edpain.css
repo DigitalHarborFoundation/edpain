@@ -46,6 +46,9 @@ body > header #anchorLogo {
   top: 0; 
   vertical-align: top;
 }
+body > header a {
+	text-decoration:none;
+}
 #anchorLogo {
   word-wrap: nowrap;
   font-size: inherit;
