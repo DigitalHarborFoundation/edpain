@@ -200,29 +200,28 @@ $(function() {
     });
   
   //share via twitter
-  var getTwitterShareUrl = function(text, permalink) {
+  var getTwitterShareUrl = function(text) {
     var url = "https://twitter.com/intent/tweet";
-    url += "?url=" + encodeURI(permalink);
+    url += "?url=" + encodeURI("http://edpain.digitalharborfoundation.org");
     // add #edpain to front and quote it (or end ellipses)
     url += "&text=" + "%23edpain%20%E2%80%9C" + (text.length <= 109 ? (text + '%E2%80%9D') : (text.substr(0,109) + "%E2%80%A6"));
     return url;
   };
   //share via facebook
-  var getFacebookShareUrl = function(text, permalink) {
+  var getFacebookShareUrl = function(text) {
     var url = "http://www.facebook.com/dialog/feed";
-    url += "?link=" + encodeURI(permalink);
+    url += "?link=" + encodeURI("http://edpain.digitalharborfoundation.org");
     url += "&app_id=366391053434145"
     url += "&name=%23edpain";
     url += "&picture=" + encodeURI("http://www.digitalharborfoundation.org/dhf_logo.png");
-    url += "&redirect_uri=" +  encodeURI("https://edpain.digitalharborfoundation.org");
+    url += "&redirect_uri=" +  encodeURI("http://edpain.digitalharborfoundation.org");
     url += "&description=" + (text.length <= 109 ? (text + '%E2%80%9D') : (text.substr(0,109) + "%E2%80%A6"));
     return url;
   };
   $("#pains").on("click", "button.twitter", function(e) {
     var li = $(this).closest("li");
     var text = li.find("q").text();
-    var permalink = li.find("a").attr("href");
-    var url = getTwitterShareUrl(text, permalink);
+    var url = getTwitterShareUrl(text);
     var newwindow = window.open(url);
     if (window.focus) { 
       newwindow.focus();
@@ -232,7 +231,6 @@ $(function() {
   .on("click", "button.facebook", function(e) {
     var li = $(this).closest("li");
     var text = li.find("q").text();
-    var permalink = li.find("a").attr("href");
     var url = getFacebookShareUrl(text, permalink);
     var newwindow = window.open(url);
     if (window.focus) { 
