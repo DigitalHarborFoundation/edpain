@@ -159,7 +159,8 @@ body > header
 
 #painEntry .post,
 #postPainEntry button,
-#pains li button
+#pains li button,
+body > footer button
   width 10.5em
   font-size inherit
   font-family "GeosansLight"
@@ -198,7 +199,8 @@ body > header
 
 #painEntry .post:active,
 #postPainEntry button:active,
-#pains button:active
+#pains button:active,
+body > footer button:active
   color #DDD
   box-shadow 2px 2px 2px #AAA inset
   position relative
@@ -301,10 +303,15 @@ body > header
         color dhfgreen
       button
         background-color dhfgreen
-footer
+body > footer
   width 100%
   clear both
   padding-bottom 2em
   p
     text-align center
     font-size 200%
+    display none
+  button
+    padding .25em
+    font-size 200%
+  

@@ -262,23 +262,31 @@ $(function() {
 	  });
   };
 	var footer = $("body > footer");
-	var footerWaypointOpts = {offset: '100%'};
 	var lock = false;
-  footer.waypoint(function(e,dir) {
+	var footerWaypointOpts = {offset: '100%'};
+	var loadMorePains = function() {
     if (!lock) {
       lock = true;
 	  	footer.waypoint('remove');
-  		appendMorePains(function(data) {
+	    var button = footer.find("button").hide();
+	    var p = footer.find("p");
+  	  p.show();
+  	  appendMorePains(function(data) {
         if (data.length < 10) {
-          footer.find("p").html("You have reached the last #edpain.");
+          p.html("You have reached the last #edpain.");
         }
         else {
           lock = false;
          	footer.waypoint(footerWaypointOpts);
+          p.fadeOut(function() {
+            button.fadeIn();
+          });
         }
-  		});
-		}
-	}, footerWaypointOpts);
+  	  });
+	  }
+	};
+  footer.waypoint(loadMorePains, footerWaypointOpts)
+    .find("button").click(loadMorePains);
   var socket = io.connect();
   socket.on('newPain', function (data) {
     addPain(data, true);
