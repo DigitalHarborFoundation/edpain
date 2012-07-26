@@ -215,7 +215,7 @@ $(function() {
     url += "&name=%23edpain";
     url += "&picture=" + encodeURI("http://www.digitalharborfoundation.org/dhf_logo.png");
     url += "&redirect_uri=" +  encodeURI("http://edpain.digitalharborfoundation.org");
-    url += "&description=" + (text.length <= 109 ? (text + '%E2%80%9D') : (text.substr(0,109) + "%E2%80%A6"));
+    url += "&description=" + encodeURI(text);
     return url;
   };
   $("#pains").on("click", "button.twitter", function(e) {
