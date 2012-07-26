@@ -263,16 +263,21 @@ $(function() {
   };
 	var footer = $("body > footer");
 	var footerWaypointOpts = {offset: '100%'};
+	var lock = false;
   footer.waypoint(function(e,dir) {
-		footer.waypoint('remove');
-		appendMorePains(function(data) {
-      if (data.length < 10) {
-        footer.find("p").html("You have reached the last #edpain.");
-      }
-      else {
-       	footer.waypoint(footerWaypointOpts);
-      }
-		});
+    if (!lock) {
+      lock = true;
+	  	footer.waypoint('remove');
+  		appendMorePains(function(data) {
+        if (data.length < 10) {
+          footer.find("p").html("You have reached the last #edpain.");
+        }
+        else {
+          lock = false;
+         	footer.waypoint(footerWaypointOpts);
+        }
+  		});
+		}
 	}, footerWaypointOpts);
   var socket = io.connect();
   socket.on('newPain', function (data) {
