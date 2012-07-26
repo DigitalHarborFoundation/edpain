@@ -101,7 +101,7 @@ var httpServer = app.listen(port, function() {
 });
 
 var io = sio.listen(httpServer);
-io.setLogLevel(2);
+io.set("log level",2);
 addNewPain = function(pain) {
 	io.sockets.emit('newPain', pain);
 };
