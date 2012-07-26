@@ -208,11 +208,12 @@ $(function() {
     return url;
   };
   //share via facebook
-  var getFacebookShareUrl = function(text) {
+  var getFacebookShareUrl = function(text, userString) {
     var url = "http://www.facebook.com/dialog/feed";
     url += "?link=" + encodeURI("http://edpain.digitalharborfoundation.org");
     url += "&app_id=366391053434145"
     url += "&name=%23edpain";
+    url += "&caption=" + encodeURI(userString);
     url += "&picture=" + encodeURI("http://www.digitalharborfoundation.org/dhf_logo.png");
     url += "&redirect_uri=" +  encodeURI("http://edpain.digitalharborfoundation.org");
     url += "&description=" + encodeURI(text);
@@ -231,7 +232,8 @@ $(function() {
   .on("click", "button.facebook", function(e) {
     var li = $(this).closest("li");
     var text = li.find("q").text();
-    var url = getFacebookShareUrl(text);
+    var userString = li.find("cite").text();
+    var url = getFacebookShareUrl(text, userString);
     var newwindow = window.open(url);
     if (window.focus) { 
       newwindow.focus();
