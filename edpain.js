@@ -231,7 +231,7 @@ $(function() {
   .on("click", "button.facebook", function(e) {
     var li = $(this).closest("li");
     var text = li.find("q").text();
-    var url = getFacebookShareUrl(text, permalink);
+    var url = getFacebookShareUrl(text);
     var newwindow = window.open(url);
     if (window.focus) { 
       newwindow.focus();
