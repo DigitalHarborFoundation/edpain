@@ -9,6 +9,8 @@ html
     meta(name='csrf_token', content='#{csrf_token}')
     link(rel='stylesheet', type='text/css', href='http://yui.yahooapis.com/3.5.1/build/cssreset/cssreset-min.css')
     link(rel='stylesheet', type='text/css', href='edpain.css')
+    //if lte IE 9
+      link(rel='stylesheet', type='text/css', href='edpain-ie.css')
     script(src='jquery.min.js')
     script(src='underscore-min.js')
     script(src='waypoints.min.js')
