@@ -107,7 +107,8 @@ var xml = feed.xml();
 var addPainToFeed = function(pain) {
   feed.item({
       title:  pain.pain.length > 20 ? pain.pain.substr(0,20) : pain.pain,
-      description: pain.pain,
+      description: pain.pain + "\n" + pain.name + ' — ' + pain.role
+        + ' from ' + (pain.cityState || pain.zip),
       url: baseUrl + '/?id=' + pain._id,
       guid: pain._id,
       author: pain.name ? pain.name : "Anonymous",
