@@ -4,8 +4,11 @@ var MONGO_URI = process.env.MONGOLAB_URI || 'mongodb://127.0.0.1:27017/test';
 var sio = require('socket.io');
 var _ = require('underscore');
 var rss = require('rss');
+var RedisStore = requre('connect-redis')(express);
 
 var baseUrl = "http://edpain.digitalharborfoundation.org";
+var redisUrl = url.parse(process.env.REDISTOGO_URL);
+var redisAuth = redisUrl.auth.split(':');
 
 var app = express.createServer();
 app.set('views', __dirname);
@@ -14,8 +17,15 @@ app.use(express.logger());
 app.use(express.limit('5kb'));
 app.use(express.bodyParser());
 app.use(express.cookieParser());
-app.use(express.session({ secret: process.env.SESSION_KEY || "takeonlywhatyouneed"}));
-//app.use(express.csrf());
+app.use(express.session({ 
+  secret: process.env.SESSION_KEY || "takeonlywhatyouneed",
+  store: new RedisStore({
+    host: redisUrl.hostname,
+    port: redisUrl.port,
+    db: redisAuth[0],
+    pass: redisAuth[1]
+  })}));
+app.use(express.csrf());
 app.use(require("stylus").middleware({
 		debug: true,
     src: __dirname,
