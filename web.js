@@ -106,7 +106,7 @@ var feed = new rss({
 var xml = feed.xml();
 var addPainToFeed = function(pain) {
   feed.item({
-      title:  pain.length > 20 ? pain.substr(0,20) : pain,
+      title:  pain.pain.length > 20 ? pain.pain.substr(0,20) : pain.pain,
       description: pain.pain,
       url: baseUrl + '/?id=' + pain._id,
       guid: pain._id,
@@ -120,13 +120,13 @@ mongo.connect(MONGO_URI, function(error, db) {
   });
   db.collection('pains', function(err, painCollection) {
     var cursor = painCollection.find().sort({date:-1});
-    cursor.each(function(err, pains) {
+    cursor.each(function(err, pain) {
       if (err) {
         console.log(err);
         return;
       }
-      for (var i in pains) {
-        addPainToFeed(pains[i]);
+      if (pain != null) {
+        addPainToFeed(pain);
       }
     });
     xml = feed.xml();
