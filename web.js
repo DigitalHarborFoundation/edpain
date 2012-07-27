@@ -10,6 +10,12 @@ var url = require('url');
 var baseUrl = "http://edpain.digitalharborfoundation.org";
 var redisUrl = url.parse(process.env.REDISTOGO_URL || "redis://dev:dev@127.0.0.1/");
 var redisAuth = redisUrl.auth.split(':');
+var redisStore = new RedisStore({
+  host: redisUrl.hostname,
+  port: redisUrl.port,
+  db: redisAuth[0],
+  pass: redisAuth[1]
+});
 
 var app = express.createServer();
 app.set('views', __dirname);
@@ -20,12 +26,7 @@ app.use(express.bodyParser());
 app.use(express.cookieParser());
 app.use(express.session({ 
   secret: process.env.SESSION_KEY || "takeonlywhatyouneed",
-  store: new RedisStore({
-    host: redisUrl.hostname,
-    port: redisUrl.port,
-    db: redisAuth[0],
-    pass: redisAuth[1]
-  })}));
+  store: redisStore}));
 app.use(express.csrf());
 app.use(require("stylus").middleware({
 		debug: true,
@@ -158,7 +159,18 @@ var httpServer = app.listen(port, function() {
 });
 
 var io = sio.listen(httpServer);
+io.enable('browser client minification');
+io.enable('browser client etag');
+io.enable('browser client gzip');
 io.set("log level",2);
+io.set('transports', [
+    'websocket'
+  , 'flashsocket'
+  , 'htmlfile'
+  , 'xhr-polling'
+  , 'jsonp-polling'
+]);
+io.set('store', redisStore);
 addNewPain = function(pain) {
 	io.sockets.emit('newPain', pain);
   addPainToFeed(pain);
