@@ -4,10 +4,11 @@ var MONGO_URI = process.env.MONGOLAB_URI || 'mongodb://127.0.0.1:27017/test';
 var sio = require('socket.io');
 var _ = require('underscore');
 var rss = require('rss');
-var RedisStore = requre('connect-redis')(express);
+var RedisStore = require('connect-redis')(express);
+var url = require('url');
 
 var baseUrl = "http://edpain.digitalharborfoundation.org";
-var redisUrl = url.parse(process.env.REDISTOGO_URL);
+var redisUrl = url.parse(process.env.REDISTOGO_URL || "redis://dev:dev@127.0.0.1/");
 var redisAuth = redisUrl.auth.split(':');
 
 var app = express.createServer();
