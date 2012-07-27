@@ -171,10 +171,11 @@ io.set('transports', [
   , 'jsonp-polling'
 ]);
 var SioRedisStore = require('socket.io/lib/stores/redis');
+console.log(redisStore);
 io.set('store', new SioRedisStore({
-  redisPub : redisStore.createClient()
-, redisSub : redisStore.createClient()
-, redisClient : redisStore.createClient()
+  redisPub : redisStore.client
+, redisSub : redisStore.client
+, redisClient : redisStore.client
 }));
 addNewPain = function(pain) {
 	io.sockets.emit('newPain', pain);
