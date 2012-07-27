@@ -170,7 +170,12 @@ io.set('transports', [
   , 'xhr-polling'
   , 'jsonp-polling'
 ]);
-io.set('store', redisStore);
+var SioRedisStore = require('socket.io/lib/stores/redis');
+io.set('store', new SioRedisStore({
+  redisPub : redisStore.createClient()
+, redisSub : redisStore.createClient()
+, redisClient : redisStore.createClient()
+}));
 addNewPain = function(pain) {
 	io.sockets.emit('newPain', pain);
   addPainToFeed(pain);
