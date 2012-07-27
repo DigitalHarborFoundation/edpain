@@ -164,17 +164,9 @@ var httpServer = app.listen(PORT, function() {
 
 //start the socketio server
 var io = sio.listen(httpServer);
-io.enable('browser client minification');
-io.enable('browser client etag');
-io.enable('browser client gzip');
 io.set("log level",2);
-io.set('transports', [
-    'websocket'
-  , 'flashsocket'
-  , 'htmlfile'
-  , 'xhr-polling'
-  , 'jsonp-polling'
-]);
+io.set('transports', ['xhr-polling']);
+io.set('polling duration', 10);
 //TODO: get redis store working for socketio
 
 //adds new pains to websocket and rss
