@@ -106,7 +106,7 @@ var feed = new rss({
 var xml = feed.xml();
 var addPainToFeed = function(pain) {
   feed.item({
-      title:  pain.pain.length > 30 ? pain.pain.substr(0,30) : pain.pain,
+      title:  pain.pain.length > 30 ? (pain.pain.substr(0,27) + "...") : pain.pain,
       description: pain.pain + "<br />" + pain.name + ' — ' + pain.role
         + ' from ' + (pain.cityState || pain.zip),
       url: baseUrl + '/?id=' + pain._id,
