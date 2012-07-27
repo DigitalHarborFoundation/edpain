@@ -15,7 +15,7 @@ app.use(express.limit('5kb'));
 app.use(express.bodyParser());
 app.use(express.cookieParser());
 app.use(express.session({ secret: process.env.SESSION_KEY || "takeonlywhatyouneed"}));
-app.use(express.csrf());
+//app.use(express.csrf());
 app.use(require("stylus").middleware({
 		debug: true,
     src: __dirname,
