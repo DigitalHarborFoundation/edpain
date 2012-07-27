@@ -64,7 +64,7 @@ $(function() {
   // convert zip code to city, state
   var geocoder = new google.maps.Geocoder();
   var zipToCityState = function(zip, callback) {
-    geocoder.geocode({ 'address': zip}, function(results, status) {
+    geocoder.geocode({ 'address': zip + ", USA"}, function(results, status) {
       if (results && results.length) {
         for (var i = 0; i < results.length;i++) {
           if (results[i].types[0] == "postal_code") {
