@@ -130,6 +130,7 @@ mongo.connect(MONGO_URI, function(error, db) {
       }
     });
     xml = feed.xml();
+    console.log(xml);
   });
 });
 app.get("/rss.xml", function(req, res) {
