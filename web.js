@@ -95,7 +95,7 @@ app.post("/json/pains", function(req, res) {
 app.get('/', function(req, res){
   res.render('index', {csrf_token: req.session._csrf});
 });
-var feed = new RSS({
+var feed = new rss({
   title: '#edpain',
   description: 'identifying the pain points of education',
   feed_url: baseUrl + '/rss.xml',
@@ -118,10 +118,16 @@ mongo.connect(MONGO_URI, function(error, db) {
   db.addListener("error", function(error){
     console.log("Error connecting to MongoLab");
   });
-  db.collection('pains', function(err, pains) {
-    var cursor = pains.find().sort({date:-1});
-    cursor.each(function(err, pain) {
-      addPainToFeed(pain);
+  db.collection('pains', function(err, painCollection) {
+    var cursor = painCollection.find().sort({date:-1});
+    cursor.each(function(err, pains) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      for (var i in pains) {
+        addPainToFeed(pains[i]);
+      }
     });
     xml = feed.xml();
   });
