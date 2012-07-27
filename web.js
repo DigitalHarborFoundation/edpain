@@ -5,7 +5,7 @@ var sio = require('socket.io');
 var _ = require('underscore');
 var rss = require('rss');
 
-var baseUrl = "http://edpain-test.herokuapp.com";
+var baseUrl = "http://edpain.digitalharborfoundation.org";
 
 var app = express.createServer();
 app.set('views', __dirname);
