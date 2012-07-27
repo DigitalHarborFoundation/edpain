@@ -171,7 +171,6 @@ io.set('transports', [
   , 'jsonp-polling'
 ]);
 var SioRedisStore = require('socket.io/lib/stores/redis');
-console.log(redisStore);
 io.set('store', new SioRedisStore({
   redisPub : redisStore.client
 , redisSub : redisStore.client
