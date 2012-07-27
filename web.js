@@ -5,6 +5,8 @@ var sio = require('socket.io');
 var _ = require('underscore');
 var rss = require('rss');
 
+var baseUrl = "http://edpain-test.herokuapp.com";
+
 var app = express.createServer();
 app.set('views', __dirname);
 app.set('view engine', 'jade');
@@ -96,9 +98,9 @@ app.get('/', function(req, res){
 var feed = new RSS({
   title: '#edpain',
   description: 'identifying the pain points of education',
-  feed_url: 'http://edpain-test.herokuapp.com/rss.xml',
-  site_url: 'http://edpain-test.herokuapp.com',
-  image_url: 'http://edpain-test.herokuapp.com/dhflogo_small.png',
+  feed_url: baseUrl + '/rss.xml',
+  site_url: baseUrl,
+  image_url: baseUrl + '/dhflogo_small.png',
   author: 'Digital Harbor Foundation'
 });
 var xml = feed.xml();
@@ -106,7 +108,7 @@ var addPainToFeed = function(pain) {
   feed.item({
       title:  pain.length > 20 ? pain.substr(0,20) : pain,
       description: pain.pain,
-      url: 'http://edpain-test.herokuapp.com/?id=' + pain._id,
+      url: baseUrl + '/?id=' + pain._id,
       guid: pain._id,
       author: pain.name ? pain.name : "Anonymous",
       date: pain.date
