@@ -106,8 +106,8 @@ var feed = new rss({
 var xml = feed.xml();
 var addPainToFeed = function(pain) {
   feed.item({
-      title:  pain.pain.length > 20 ? pain.pain.substr(0,20) : pain.pain,
-      description: pain.pain + "\n" + pain.name + ' — ' + pain.role
+      title:  pain.pain.length > 30 ? pain.pain.substr(0,30) : pain.pain,
+      description: pain.pain + "<br />" + pain.name + ' — ' + pain.role
         + ' from ' + (pain.cityState || pain.zip),
       url: baseUrl + '/?id=' + pain._id,
       guid: pain._id,
