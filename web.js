@@ -3,6 +3,7 @@ var mongo = require('mongodb');
 var MONGO_URI = process.env.MONGOLAB_URI || 'mongodb://127.0.0.1:27017/test';
 var sio = require('socket.io');
 var _ = require('underscore');
+var rss = require('rss');
 
 var app = express.createServer();
 app.set('views', __dirname);
@@ -23,7 +24,6 @@ app.use(function(req,res,next) {
 	res.locals._csrf = req.session._csrf;
 	next();
 });
-
 app.get("/json/pains", function(req, res) {
 	mongo.connect(MONGO_URI, {}, function(error, db) {
 	  db.addListener("error", function(error) {
@@ -93,6 +93,41 @@ app.post("/json/pains", function(req, res) {
 app.get('/', function(req, res){
   res.render('index', {csrf_token: req.session._csrf});
 });
+var feed = new RSS({
+  title: '#edpain',
+  description: 'identifying the pain points of education',
+  feed_url: 'http://edpain-test.herokuapp.com/rss.xml',
+  site_url: 'http://edpain-test.herokuapp.com',
+  image_url: 'http://edpain-test.herokuapp.com/dhflogo_small.png',
+  author: 'Digital Harbor Foundation'
+});
+var xml = feed.xml();
+var addPainToFeed = function(pain) {
+  feed.item({
+      title:  pain.length > 20 ? pain.substr(0,20) : pain,
+      description: pain.pain,
+      url: 'http://edpain-test.herokuapp.com/?id=' + pain._id,
+      guid: pain._id,
+      author: pain.name ? pain.name : "Anonymous",
+      date: pain.date
+  });
+};
+mongo.connect(MONGO_URI, function(error, db) {
+  db.addListener("error", function(error){
+    console.log("Error connecting to MongoLab");
+  });
+  db.collection('pains', function(err, pains) {
+    var cursor = pains.find().sort({date:-1});
+    cursor.each(function(err, pain) {
+      addPainToFeed(pain);
+    });
+    xml = feed.xml();
+  });
+});
+app.get("/rss.xml", function(req, res) {
+  res.contentType("rss");
+  res.send(xml);
+});
 app.use("/", express.static(__dirname));
 
 var port = process.env.PORT || 8000;
@@ -104,4 +139,5 @@ var io = sio.listen(httpServer);
 io.set("log level",2);
 addNewPain = function(pain) {
 	io.sockets.emit('newPain', pain);
+  addPainToFeed(pain);
 };
