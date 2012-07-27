@@ -105,7 +105,6 @@ var feed = new rss({
 });
 var xml = feed.xml();
 var addPainToFeed = function(pain) {
-  console.log("adding pain to feed");
   feed.item({
       title:  pain.pain.length > 20 ? pain.pain.substr(0,20) : pain.pain,
       description: pain.pain,
@@ -131,7 +130,6 @@ mongo.connect(MONGO_URI, function(error, db) {
       }
       else {
         xml = feed.xml();
-        console.log(xml);
       }
     });
   });
@@ -152,4 +150,5 @@ io.set("log level",2);
 addNewPain = function(pain) {
 	io.sockets.emit('newPain', pain);
   addPainToFeed(pain);
+  xml = feed.xml();
 };
