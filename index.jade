@@ -21,11 +21,11 @@ html
     script(src='edpain.js')
     != "<script type='template/underscore' id='painDisplayTemplate'>"
     li
-      q <%==pain %>
+      q <%-pain %>
       cite
-        | <%==name %> — <%==role%> from
+        | <%-name %> — <%-role%> from
         span#zipTarget
-          |  <%== cityState || zip %>
+          |  <%- cityState || zip %>
     != "</script>"
     != "<script type='template/underscore' id='painExtraTemplate'>"
       .painExtra
