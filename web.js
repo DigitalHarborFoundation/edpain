@@ -1,18 +1,20 @@
+var MONGO_URI = process.env.MONGOLAB_URI || 'mongodb://127.0.0.1:27017/test';
+var PORT = process.env.PORT || 8000;
+var REDIS_URI = url.parse(process.env.REDISTOGO_URL || "redis://dev:dev@127.0.0.1/");
+var baseUrl = "http://edpain.digitalharborfoundation.org";
+
 var express = require('express');
 var mongo = require('mongodb');
-var MONGO_URI = process.env.MONGOLAB_URI || 'mongodb://127.0.0.1:27017/test';
 var sio = require('socket.io');
 var _ = require('underscore');
 var rss = require('rss');
 var RedisStore = require('connect-redis')(express);
 var url = require('url');
 
-var baseUrl = "http://edpain.digitalharborfoundation.org";
-var redisUrl = url.parse(process.env.REDISTOGO_URL || "redis://dev:dev@127.0.0.1/");
-var redisAuth = redisUrl.auth.split(':');
+var redisAuth = REDIS_URI.auth.split(':');
 var redisStore = new RedisStore({
-  host: redisUrl.hostname,
-  port: redisUrl.port,
+  host: REDIS_URI.hostname,
+  port: REDIS_URI.port,
   db: redisAuth[0],
   pass: redisAuth[1]
 });
@@ -107,6 +109,8 @@ app.post("/json/pains", function(req, res) {
 app.get('/', function(req, res){
   res.render('index', {csrf_token: req.session._csrf});
 });
+
+//config the rss feed
 var feed = new rss({
   title: '#edpain',
   description: 'identifying the pain points of education',
@@ -153,11 +157,12 @@ app.get("/rss.xml", function(req, res) {
 });
 app.use("/", express.static(__dirname));
 
-var port = process.env.PORT || 8000;
-var httpServer = app.listen(port, function() {
-  console.log("Listening on " + port);
+//start the express http server
+var httpServer = app.listen(PORT, function() {
+  console.log("Listening on " + PORT);
 });
 
+//start the socketio server
 var io = sio.listen(httpServer);
 io.enable('browser client minification');
 io.enable('browser client etag');
@@ -170,6 +175,9 @@ io.set('transports', [
   , 'xhr-polling'
   , 'jsonp-polling'
 ]);
+//TODO: get redis store working for socketio
+
+//adds new pains to websocket and rss
 addNewPain = function(pain) {
 	io.sockets.emit('newPain', pain);
   addPainToFeed(pain);
