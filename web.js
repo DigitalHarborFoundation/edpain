@@ -40,7 +40,7 @@ app.use(function(req,res,next) {
 	res.locals._csrf = req.session._csrf;
 	next();
 });
-app.get("/json/pains", function(req, res) {
+var painCollect = function(callback) {
 	mongo.connect(MONGO_URI, {}, function(error, db) {
 	  db.addListener("error", function(error) {
 	    console.log("Error connecting to MongoLab");
@@ -50,23 +50,27 @@ app.get("/json/pains", function(req, res) {
 				console.log(err);
 				return;
 			}
-      var pains = coll;
-			res.setHeader("Content-Type", "application/json");
-			var cursor;
-			if (req.query.lastDate) {
-				cursor = pains.find({date: { $lt: Number(req.query.lastDate)} }).sort({date:-1}).limit(10);
-			} else {
-				cursor = pains.find().sort({date:-1}).limit(10);
+			callback(coll);
+		});
+	});
+};
+app.get("/json/pains", function(req, res) {
+  painCollect(function(pains) {
+    res.setHeader("Content-Type", "application/json");
+		var cursor;
+		if (req.query.lastDate) {
+			cursor = pains.find({date: { $lt: Number(req.query.lastDate)} }).sort({date:-1}).limit(10);
+		} else {
+			cursor = pains.find().sort({date:-1}).limit(10);
+		}
+		cursor.toArray(function(err,docs) {
+			if (err) {
+				console.log(err);
+				return;
 			}
-			cursor.toArray(function(err,docs) {
-				if (err) {
-					console.log(err);
-					return;
-				}
-				console.log(docs.length);
-		    res.write(JSON.stringify(docs));
-				res.end();
-			});
+			console.log(docs.length);
+	    res.write(JSON.stringify(docs));
+			res.end();
 		});
 	});
 });
@@ -83,26 +87,17 @@ app.post("/json/pains", function(req, res) {
 		return;
 	}
 	pain.date = new Date().getTime();
-	mongo.connect(MONGO_URI, function(error, db) {
-	  db.addListener("error", function(error){
-	    console.log("Error connecting to MongoLab");
-	  });
-	  db.collection('pains', function(err, pains) {
+	painCollect(function(pains){
+		res.setHeader("Content-Type", "application/json");
+		pains.insert(pain, {safe:true}, function(err,docs) {
+			console.log(arguments);
 			if (err) {
 				console.log(err);
 				return;
 			}
-			res.setHeader("Content-Type", "application/json");
-			pains.insert(pain, {safe:true}, function(err,docs) {
-				console.log(arguments);
-				if (err) {
-					console.log(err);
-					return;
-				}
-				addNewPain(docs[0]);
-		    res.write(JSON.stringify(docs));
-				res.end();
-			});
+			addNewPain(docs[0]);
+	    res.write(JSON.stringify(docs));
+			res.end();
 		});
 	});
 });
@@ -131,24 +126,19 @@ var addPainToFeed = function(pain) {
       date: pain.date
   });
 };
-mongo.connect(MONGO_URI, function(error, db) {
-  db.addListener("error", function(error){
-    console.log("Error connecting to MongoLab");
-  });
-  db.collection('pains', function(err, painCollection) {
-    var cursor = painCollection.find().sort({date:-1});
-    cursor.each(function(err, pain) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      if (pain != null) {
-        addPainToFeed(pain);
-      }
-      else {
-        xml = feed.xml();
-      }
-    });
+painCollect(function(pains) {
+  var cursor = pains.find().sort({date:-1});
+  cursor.each(function(err, pain) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (pain != null) {
+      addPainToFeed(pain);
+    }
+    else {
+      xml = feed.xml();
+    }
   });
 });
 app.get("/rss.xml", function(req, res) {
