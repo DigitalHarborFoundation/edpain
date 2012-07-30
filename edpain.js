@@ -237,7 +237,7 @@
           for (_j = 0, _len1 = data.length; _j < _len1; _j++) {
             pain = data[_j];
             if (pain.cityState != null) {
-              addPain(pain(false));
+              addPain(pain, false);
             } else {
               zipToCityState(pain.zip(function(cityState) {
                 pain.cityState = cityState;

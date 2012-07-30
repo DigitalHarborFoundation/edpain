@@ -193,7 +193,7 @@ $ ->
       success: (data) ->
         for pain in data
           if pain.cityState?
-            addPain pain false
+            addPain pain, false
           else
             zipToCityState pain.zip (cityState) ->
               pain.cityState = cityState
