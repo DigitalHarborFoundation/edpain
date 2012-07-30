@@ -40,6 +40,7 @@ app.use(function(req,res,next) {
 	res.locals._csrf = req.session._csrf;
 	next();
 });
+// collect the pains collection from mongo and do callback with it
 var painCollect = function(callback) {
 	mongo.connect(MONGO_URI, {}, function(error, db) {
 	  db.addListener("error", function(error) {
