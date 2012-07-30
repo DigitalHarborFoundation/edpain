@@ -106,12 +106,12 @@ $ ->
         callback false, arguments
   # saving of a pain when posted
   extractPain = (callback) ->
-    name = painEntry.find ".name" .val()
+    name = painEntry.find(".name").val()
     data =
-      role: painEntry.find ".role" .val()
-      'pain': painEntry.find "textarea" .val()
+      role: painEntry.find(".role").val()
+      'pain': painEntry.find("textarea").val()
       name: if name? then name else ""
-      zip: painEntry.find ".zip" .val()
+      zip: painEntry.find(".zip").val()
     # TODO: optimization: do zip conversion both client 
     # and server side to speed it up!
     zipToCityState data.zip, (cityState) ->
@@ -127,7 +127,7 @@ $ ->
           painEntry.fadeOut 'slow', -> 
             postPainEntry.fadeIn 'slow'
         @deactivated = false;
-  painEntry.find(".post").on "click", postPain;
+  painEntry.find(".post").on "click", postPain
 
   #When another pain is desired, reset just the pain and scroll to
   resetAndScrollToPainEntry = ->

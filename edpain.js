@@ -133,12 +133,12 @@
     };
     extractPain = function(callback) {
       var data, name;
-      name = painEntry.find(".name".val());
+      name = painEntry.find(".name").val();
       data = {
-        role: painEntry.find(".role".val()),
-        'pain': painEntry.find("textarea".val()),
+        role: painEntry.find(".role").val(),
+        'pain': painEntry.find("textarea").val(),
         name: name != null ? name : "",
-        zip: painEntry.find(".zip".val())
+        zip: painEntry.find(".zip").val()
       };
       return zipToCityState(data.zip, function(cityState) {
         data.cityState = cityState;
