@@ -177,9 +177,9 @@
         return resetAndScrollToPainEntry();
       }
     };
-    postPainEntry.find(".back".click(anotherPain.waypoint(function(e, dir) {
+    postPainEntry.find(".back").click(anotherPain).waypoint(function(e, dir) {
       return $(this).toggleClass("sticky", dir === "down");
-    })));
+    });
     getTwitterShareUrl = function(text) {
       var url;
       url = "https://twitter.com/intent/tweet";

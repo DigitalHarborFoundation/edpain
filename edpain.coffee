@@ -140,8 +140,8 @@ $ ->
         resetAndScrollToPainEntry()
     else
       resetAndScrollToPainEntry()
-  postPainEntry.find ".back"
-    .click anotherPain
+  postPainEntry.find(".back")
+    .click(anotherPain)
     # add sticky class (for fixed) when have another 
     # edpain button goes out of the window
     .waypoint (e,dir) ->
