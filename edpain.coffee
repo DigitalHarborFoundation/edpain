@@ -37,7 +37,7 @@ $ ->
     zip = $("#painEntry .zip").val();
     if 3 <=  $("#painEntry textarea").val()?.length <= 300 and
         $("#painEntry .role").val()?.length > 0 and 
-        zip.val()?.length is 5 and 
+        zip?.length is 5 and 
         not isNaN(Number(zip))
       if post.css "visibility" is "hidden"
         post.hide()

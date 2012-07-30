@@ -38,10 +38,10 @@
       }
     });
     showPostButton = function() {
-      var post, zip, _ref, _ref1, _ref2, _ref3;
+      var post, zip, _ref, _ref1, _ref2;
       post = $("#painEntry .post");
       zip = $("#painEntry .zip").val();
-      if ((3 <= (_ref = (_ref1 = $("#painEntry textarea").val()) != null ? _ref1.length : void 0) && _ref <= 300) && ((_ref2 = $("#painEntry .role").val()) != null ? _ref2.length : void 0) > 0 && ((_ref3 = zip.val()) != null ? _ref3.length : void 0) === 5 && !isNaN(Number(zip))) {
+      if ((3 <= (_ref = (_ref1 = $("#painEntry textarea").val()) != null ? _ref1.length : void 0) && _ref <= 300) && ((_ref2 = $("#painEntry .role").val()) != null ? _ref2.length : void 0) > 0 && (zip != null ? zip.length : void 0) === 5 && !isNaN(Number(zip))) {
         if (post.css("visibility" === "hidden")) {
           return post.hide().css("visibility", "visible".fadeIn());
         }
