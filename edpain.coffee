@@ -41,7 +41,7 @@ $ ->
         not isNaN(Number(zip))
       if post.css "visibility" is "hidden"
         post.hide()
-            .css "visibility", "visible"
+            .css("visibility", "visible")
             .fadeIn()
     else
       post.css "visibility", "hidden"
