@@ -151,8 +151,11 @@
         return;
       }
       this.deactivated = true;
+      console.log("incoming");
       return extractPain(function(painIn) {
+        console.log(painIn);
         return updateServerWithPain(painIn, function(success, painOut) {
+          console.log("success");
           if (success) {
             painEntry.fadeOut('slow', function() {
               return postPainEntry.fadeIn('slow');

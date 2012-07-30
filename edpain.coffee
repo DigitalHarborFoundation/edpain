@@ -120,8 +120,11 @@ $ ->
   postPain = ->
     return if @deactivated
     @deactivated = true
+    console.log "incoming"
     extractPain (painIn) =>
+      console.log painIn
       updateServerWithPain painIn, (success, painOut) =>
+        console.log "success"
         if success
           # TODO: open relevant pain!
           painEntry.fadeOut 'slow', -> 
