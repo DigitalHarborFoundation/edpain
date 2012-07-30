@@ -39,7 +39,7 @@ $ ->
         $("#painEntry .role").val()?.length > 0 and 
         zip?.length is 5 and 
         not isNaN(Number(zip))
-      if post.css "visibility" is "hidden"
+      if post.css("visibility") is "hidden"
         post.hide()
             .css("visibility", "visible")
             .fadeIn()

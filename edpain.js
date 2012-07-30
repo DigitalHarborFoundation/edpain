@@ -42,7 +42,7 @@
       post = $("#painEntry .post");
       zip = $("#painEntry .zip").val();
       if ((3 <= (_ref = (_ref1 = $("#painEntry textarea").val()) != null ? _ref1.length : void 0) && _ref <= 300) && ((_ref2 = $("#painEntry .role").val()) != null ? _ref2.length : void 0) > 0 && (zip != null ? zip.length : void 0) === 5 && !isNaN(Number(zip))) {
-        if (post.css("visibility" === "hidden")) {
+        if (post.css("visibility") === "hidden") {
           return post.hide().css("visibility", "visible").fadeIn();
         }
       } else {
