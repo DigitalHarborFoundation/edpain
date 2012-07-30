@@ -275,7 +275,7 @@
         });
       }
     };
-    footer.waypoint(loadMorePains, footerWaypointOpts.find("button").click(loadMorePains));
+    footer.waypoint(loadMorePains, footerWaypointOpts).find("button").click(loadMorePains);
     socket = io.connect();
     return socket.on('newPain', function(data) {
       return addPain(data, true);

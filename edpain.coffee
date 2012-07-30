@@ -218,7 +218,7 @@ $ ->
           footer.waypoint footerWaypointOpts
           p.fadeOut ->
             button.fadeIn()
-  footer.waypoint loadMorePains, footerWaypointOpts
+  footer.waypoint(loadMorePains, footerWaypointOpts)
     .find("button")
     .click loadMorePains
   socket = io.connect()
