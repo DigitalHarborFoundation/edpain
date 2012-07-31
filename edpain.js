@@ -6,7 +6,7 @@
     forceReset = function() {
       var body;
       body = $("body");
-      if (body.css("-webkit-transform" === "translateZ(1px)")) {
+      if (body.css("-webkit-transform") === "translateZ(1px)") {
         return body.css("-webkit-transform", "none");
       } else {
         return body.css("-webkit-transform", 'translateZ(1px)');

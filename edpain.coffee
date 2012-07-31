@@ -2,7 +2,7 @@ $ ->
   # force chrome to reset (some problems below when inserting content)
   forceReset = ->
     body = $ "body"
-    if body.css "-webkit-transform" is "translateZ(1px)"
+    if body.css("-webkit-transform") is "translateZ(1px)"
       body.css "-webkit-transform","none"
     else
       body.css "-webkit-transform",'translateZ(1px)'
