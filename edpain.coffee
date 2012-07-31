@@ -14,13 +14,7 @@ $ ->
       $el.css 'font-size', win.width()/scale
     resize()
     win.on 'resize', resize
-  fontResizer $("#subHeader h1"), 6.0
-  fontResizer $("#subHeader p"), 42.0
-  fontResizer $("#description"), 35.0
-  fontResizer $("#painEntry"), 37.0
-  fontResizer $("#pains"), 22.0
-  fontResizer $("#postPainEntry"), 40.0
-  fontResizer $("body > header"), 60.0
+  fontResizer $("body"), 80.0
   
   # anal a/an solution
   $("#painEntry .role").keyup ->
