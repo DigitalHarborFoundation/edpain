@@ -164,6 +164,44 @@ app.get("/rss.xml", function(req, res) {
   res.contentType("rss");
   res.send(xml);
 });
+app.get("/allPains.csv", function(req, res) {
+  res.contentType("text/csv");
+  painCollect(function(pains) {
+		pains.find().toArray(function(err,docs) {
+			if (err) {
+				console.log(err);
+				return;
+			}
+			var wrap = function(a) {
+			  var s = String(a);
+			  return s ? ('"' + s.replace(/\"/g, "\"\"") +'"') : "";
+			};
+		  var fields = ["role", "pain", "name", "zip", "date"];
+	    for (var j = 0; j < fields.length;j++) {
+	      var field = fields[j];
+	      if (j > 0 && j < fields.length) {
+	        res.write(",");
+	      }
+	      res.write(wrap(field));
+      }  
+      res.write("\n");
+		  for (var i = 0; i < docs.length; i++) {
+		    var doc = docs[i];
+			  if (doc) {
+			    for (var j = 0; j < fields.length;j++) {
+			      var field = fields[j];
+			      if (j > 0 && j < fields.length) {
+			        res.write(",");
+			      }
+			      res.write(wrap(doc[field]));
+			    }
+			  }
+			  res.write("\n");
+			}
+			res.end();
+		});
+	});
+});
 app.use("/", express.static(__dirname));
 
 //start the express http server
