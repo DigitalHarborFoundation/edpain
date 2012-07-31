@@ -42,7 +42,7 @@
         return post.css("visibility", "hidden");
       }
     };
-    _ref = ["#painEntry .role", "#painEntry .role", "#painEntry .zip"];
+    _ref = ["#painEntry .role", "#painEntry textarea", "#painEntry .zip"];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       selector = _ref[_i];
       $(selector).keyup(showPostButton).blur(showPostButton);

@@ -39,7 +39,7 @@ $ ->
             .fadeIn()
     else
       post.css "visibility", "hidden"
-  for selector in ["#painEntry .role", "#painEntry .role", "#painEntry .zip"]
+  for selector in ["#painEntry .role", "#painEntry textarea", "#painEntry .zip"]
     $(selector).keyup(showPostButton).blur showPostButton
   
   # convert zip code to city, state
