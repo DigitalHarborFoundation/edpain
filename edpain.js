@@ -59,16 +59,17 @@
       return geocoder.geocode({
         'address': zip + ", USA"
       }, function(results, status) {
-        var a, result, _j, _len1, _ref1;
-        _ref1 = results != null;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          result = _ref1[_j];
-          if (result.types[0] === "postal_code") {
-            a = result.formatted_address;
-            if (a.indexOf(zip + ", USA") >= 0) {
-              a = a.substr(0, a.indexOf(zip) - 1);
+        var a, result, _j, _len1;
+        if (results != null) {
+          for (_j = 0, _len1 = results.length; _j < _len1; _j++) {
+            result = results[_j];
+            if (result.types[0] === "postal_code") {
+              a = result.formatted_address;
+              if (a.indexOf(zip + ", USA") >= 0) {
+                a = a.substr(0, a.indexOf(zip) - 1);
+              }
+              return callback(a);
             }
-            callback(a);
           }
         }
         if (!((results != null ? results.length : void 0) > 0)) {
@@ -137,7 +138,7 @@
       data = {
         role: painEntry.find(".role").val(),
         'pain': painEntry.find("textarea").val(),
-        name: name != null ? name : "",
+        name: (name != null ? name : ""),
         zip: painEntry.find(".zip").val()
       };
       return zipToCityState(data.zip, function(cityState) {
@@ -151,11 +152,8 @@
         return;
       }
       this.deactivated = true;
-      console.log("incoming");
       return extractPain(function(painIn) {
-        console.log(painIn);
         return updateServerWithPain(painIn, function(success, painOut) {
-          console.log("success");
           if (success) {
             painEntry.fadeOut('slow', function() {
               return postPainEntry.fadeIn('slow');
@@ -243,10 +241,10 @@
             if (pain.cityState != null) {
               addPain(pain, false);
             } else {
-              zipToCityState(pain.zip(function(cityState) {
+              zipToCityState(pain.zip, function(cityState) {
                 pain.cityState = cityState;
                 return addPain(pain, false);
-              }));
+              });
             }
           }
           return callback(data);

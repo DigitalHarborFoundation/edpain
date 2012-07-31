@@ -1,7 +1,7 @@
 var MONGO_URI = process.env.MONGOLAB_URI || 'mongodb://127.0.0.1:27017/test';
 var PORT = process.env.PORT || 8000;
 var url = require('url');
-var REDIS_URI = url.parse(process.env.REDISTOGO_URL || "redis://dev:dev@127.0.0.1/");
+var REDIS_URI = url.parse(process.env.REDISTOGO_URL || "redis://127.0.0.1/");
 var baseUrl = "http://edpain.digitalharborfoundation.org";
 
 var express = require('express');
@@ -11,13 +11,16 @@ var _ = require('underscore');
 var rss = require('rss');
 var RedisStore = require('connect-redis')(express);
 
-var redisAuth = REDIS_URI.auth.split(':');
-var redisStore = new RedisStore({
+var redisArgs = {
   host: REDIS_URI.hostname,
-  port: REDIS_URI.port,
-  db: redisAuth[0],
-  pass: redisAuth[1]
-});
+  port: REDIS_URI.port
+};
+if (REDIS_URI.auth) {
+  var redisAuth = REDIS_URI.auth.split(':');
+  redisArgs.db = redisAuth[0];
+  redisArgs.pass = redisAuth[1];
+}
+var redisStore = new RedisStore(redisArgs);
 
 var app = express.createServer();
 app.set('views', __dirname);

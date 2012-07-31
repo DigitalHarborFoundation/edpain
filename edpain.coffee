@@ -52,13 +52,14 @@ $ ->
   geocoder = new google.maps.Geocoder
   zipToCityState = (zip, callback) ->
     geocoder.geocode {'address': zip + ", USA"}, (results, status) ->
-      for result in results?
-        if result.types[0] is "postal_code"
-          a = result.formatted_address
-          # strip off zip and country if USA
-          if a.indexOf(zip + ", USA") >= 0
-            a = a.substr(0,a.indexOf(zip)-1)
-          callback a
+      if results?
+        for result in results
+          if result.types[0] is "postal_code"
+            a = result.formatted_address
+            # strip off zip and country if USA
+            if a.indexOf(zip + ", USA") >= 0
+              a = a.substr(0,a.indexOf(zip)-1)
+            return callback a
       callback zip unless results?.length > 0
   
   painDisplayTemplate = _.template $("#painDisplayTemplate").text()
@@ -110,7 +111,7 @@ $ ->
     data =
       role: painEntry.find(".role").val()
       'pain': painEntry.find("textarea").val()
-      name: if name? then name else ""
+      name: (if name? then name else "")
       zip: painEntry.find(".zip").val()
     # TODO: optimization: do zip conversion both client 
     # and server side to speed it up!
@@ -120,11 +121,8 @@ $ ->
   postPain = ->
     return if @deactivated
     @deactivated = true
-    console.log "incoming"
     extractPain (painIn) =>
-      console.log painIn
       updateServerWithPain painIn, (success, painOut) =>
-        console.log "success"
         if success
           # TODO: open relevant pain!
           painEntry.fadeOut 'slow', -> 
@@ -199,7 +197,7 @@ $ ->
           if pain.cityState?
             addPain pain, false
           else
-            zipToCityState pain.zip (cityState) ->
+            zipToCityState pain.zip, (cityState) ->
               pain.cityState = cityState
               addPain pain, false
         callback data
