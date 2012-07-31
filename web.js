@@ -58,6 +58,18 @@ var painCollect = function(callback) {
 		});
 	});
 };
+var anotherSharesAPain;
+app.get("/json/pains/voteup", function(req, res) {
+  //TODO: require login
+  var painId = req.body.id;
+  painCollect(function(pains) {
+    pains.find({_id: painId},function(err,docs) {
+      var shares = docs[0].shares;
+      anotherSharesAPain(painId, (shares ? (shares + 1) : 1));
+    });
+    pains.update({_id: painId}, {$inc: {shares: 1}}, true);
+  });
+});
 app.get("/json/pains", function(req, res) {
   painCollect(function(pains) {
     res.setHeader("Content-Type", "application/json");
@@ -107,6 +119,9 @@ app.post("/json/pains", function(req, res) {
 });
 app.get('/', function(req, res){
   res.render('index', {csrf_token: req.session._csrf});
+});
+app.get('/example-twitter-card', function(req, res){
+  res.render('twitter-card');
 });
 
 //config the rss feed
@@ -168,4 +183,9 @@ addNewPain = function(pain) {
 	io.sockets.emit('newPain', pain);
   addPainToFeed(pain);
   xml = feed.xml();
+};
+//adds new pains to websocket and rss
+anotherSharesAPain = function(painId, numShares) {
+	io.sockets.emit('anotherSharesAPain', 
+	  {'painId': painId, 'numShares' : numShares});
 };
