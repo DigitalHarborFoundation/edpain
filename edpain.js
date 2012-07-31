@@ -2,7 +2,7 @@
 (function() {
 
   $(function() {
-    var addPain, anotherPain, appendMorePains, extractPain, fontResizer, footer, footerWaypointOpts, forceReset, geocoder, getFacebookShareUrl, getTwitterShareUrl, loadMorePains, lock, painDisplayTemplate, painEntry, painExtraTemplate, postPain, postPainEntry, resetAndScrollToPainEntry, selector, showPostButton, socket, togglePainOpen, updateServerWithPain, win, zipToCityState, _i, _len, _ref;
+    var addPain, anotherPain, appendMorePains, extractPain, footer, footerWaypointOpts, forceReset, geocoder, getFacebookShareUrl, getTwitterShareUrl, loadMorePains, lock, painDisplayTemplate, painEntry, painExtraTemplate, postPain, postPainEntry, resetAndScrollToPainEntry, selector, showPostButton, socket, togglePainOpen, updateServerWithPain, zipToCityState, _i, _len, _ref;
     forceReset = function() {
       var body;
       body = $("body");
@@ -12,16 +12,15 @@
         return body.css("-webkit-transform", 'translateZ(1px)');
       }
     };
-    win = $(window);
-    fontResizer = function($el, scale) {
-      var resize;
+    (function($el, scale) {
+      var resize, win;
+      win = $(window);
       resize = function() {
         return $el.css('font-size', win.width() / scale);
       };
       resize();
       return win.on('resize', resize);
-    };
-    fontResizer($("body"), 80.0);
+    })($("body"), 80.0);
     $("#painEntry .role").keyup(function() {
       var val, _ref;
       val = $(this).val();

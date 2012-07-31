@@ -7,14 +7,14 @@ $ ->
     else
       body.css "-webkit-transform",'translateZ(1px)'
   # reflexive layout based on em's
-  win = $ window
-  fontResizer = ($el, scale) ->
+  (($el, scale) ->
+    win = $(window)
     # simplified version of fittext.js
     resize = ->
       $el.css 'font-size', win.width()/scale
     resize()
     win.on 'resize', resize
-  fontResizer $("body"), 80.0
+  ) $("body"), 80.0
   
   # anal a/an solution
   $("#painEntry .role").keyup ->
