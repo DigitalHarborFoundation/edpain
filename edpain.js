@@ -2,7 +2,7 @@
 (function() {
 
   $(function() {
-    var addPain, anotherPain, appendMorePains, extractPain, footer, footerWaypointOpts, forceReset, geocoder, getFacebookShareUrl, getTwitterShareUrl, loadMorePains, lock, painDisplayTemplate, painEntry, painExtraTemplate, postPain, postPainEntry, resetAndScrollToPainEntry, selector, showPostButton, socket, togglePainOpen, updateServerWithPain, zipToCityState, _i, _len, _ref;
+    var addPain, anotherPain, appendMorePains, extractPain, footer, footerWaypointOpts, forceReset, geocoder, getFacebookShareUrl, getTwitterShareUrl, loadMorePains, lock, painDisplayTemplate, painEntry, postPain, postPainEntry, resetAndScrollToPainEntry, selector, showPostButton, socket, updateServerWithPain, zipToCityState, _i, _len, _ref;
     forceReset = function() {
       var body;
       body = $("body");
@@ -71,30 +71,13 @@
       });
     };
     painDisplayTemplate = _.template($("#painDisplayTemplate").text());
-    painExtraTemplate = _.template($("#painExtraTemplate").text());
     painEntry = $("#painEntry");
     postPainEntry = $("#postPainEntry");
-    togglePainOpen = function(el) {
-      var extra, tmpl;
-      extra = el.data("extra");
-      if (el.hasClass("open")) {
-        if (extra != null) {
-          extra.remove();
-        }
-      } else {
-        tmpl = $(painExtraTemplate());
-        el.append(tmpl).data("extra", tmpl);
-        tmpl.hide().fadeIn("slow");
-        forceReset();
-      }
-      return el.toggleClass("open");
-    };
-    $("#pains").on("click", "li", function() {
-      return togglePainOpen($(this));
-    });
     addPain = function(data, isPrepended) {
       var a;
-      a = $(painDisplayTemplate(data));
+      a = $(painDisplayTemplate({
+        'data': data
+      }));
       if (isPrepended) {
         a.prependTo($("#pains ul"));
       }

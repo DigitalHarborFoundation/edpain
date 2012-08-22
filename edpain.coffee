@@ -57,27 +57,12 @@ $ ->
       callback zip unless results?.length > 0
   
   painDisplayTemplate = _.template $("#painDisplayTemplate").text()
-  painExtraTemplate = _.template $("#painExtraTemplate").text()
   painEntry = $ "#painEntry"
   postPainEntry = $ "#postPainEntry"
-
-  # toggling of pain open/close
-  togglePainOpen = (el) ->
-    extra = el.data "extra"
-    if el.hasClass "open"
-      extra?.remove()
-    else
-      tmpl = $ painExtraTemplate()
-      el.append(tmpl).data "extra", tmpl
-      tmpl.hide().fadeIn "slow"
-      forceReset()
-    el.toggleClass "open"
-  $("#pains").on "click", "li", ->
-    togglePainOpen($ this)
   
   # displaying a new pain coming in
   addPain = (data, isPrepended) ->
-    a = $ painDisplayTemplate data
+    a = $ painDisplayTemplate 'data':data
     a.prependTo ($ "#pains ul") if isPrepended
     a.appendTo ($ "#pains ul") unless isPrepended
     a.hide()

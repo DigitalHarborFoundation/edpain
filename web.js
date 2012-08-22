@@ -46,6 +46,10 @@ app.use(function(req,res,next) {
 // collect the pains collection from mongo and do callback with it
 var painCollect = function(callback) {
 	mongo.connect(MONGO_URI, {}, function(error, db) {
+	  if (error) {
+	    console.log(error);
+	    return;
+    }
 	  db.addListener("error", function(error) {
 	    console.log("Error connecting to MongoLab");
 	  });

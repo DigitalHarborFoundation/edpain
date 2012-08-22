@@ -25,10 +25,12 @@ transform-origin(n)
   -moz-transform-origin n
   -o-transform-origin n
   -ms-transform-origin n
+  
+@import "html5-reset"
 
 @font-face
   font-family "GeosansLight"
-  src url("GeosansLight.ttf")
+  src url("GeosansLight.ttf")  
 
 body
   font-size 16pt
@@ -129,10 +131,35 @@ body > header
 #painEntry, #postPainEntry 
   input
     margin 0 .5em
-    background-color #DDD
-    border none
-    border-radius 3px
+    border .13em solid dhfheadertext
+    border-top 0
+    border-right 0
+    border-left 0
+    border-radius .075em
     padding .25em
+    text-align center
+    &:focus
+      outline none
+  .inputwrapper
+    margin 0
+    padding 0
+    display inline
+    position relative
+    &:after, &:before
+      content ""
+      display block
+      border .13em solid dhfheadertext
+      border-left 0
+      border-top 0
+      border-bottom 0
+      height .3em
+      float right
+      position absolute
+      bottom -.38em
+    &:after
+      right .5em
+    &:before
+      left .5em
 
 #painEntry
   .role
@@ -142,15 +169,16 @@ body > header
   a
     color dhfheadertext
   p
-    margin-bottom .5em
+    margin-bottom 1em
   textarea
     width 25.5em
     height 4em
-    background-color #DDD
-    border none
-    border-radius 3px
+    border .13em solid dhfheadertext
+    border-radius .075em
     margin-bottom -.25em
     padding .15em .25em
+    &:focus
+      outline none
   .name
     width 12em
   .zip
@@ -160,7 +188,7 @@ body > header
 
 #painEntry .post,
 #postPainEntry button,
-#pains li button,
+#pains .social .post button,
 body > footer button
   width 10.5em
   font-size inherit
@@ -174,39 +202,22 @@ body > footer button
   margin 0
   margin-bottom 1em
   cursor pointer
-
-#pains li 
-  button
-    font-size 65%
-    background-color dhfblue
-    opacity 0.8
-    &:hover
-      opacity 1.0
-    &.twitter
-      clear both
-      margin-left 4em
-  a
-    font-size 35%
-    display block
-    margin-top -1.25em
-    float right
-    margin-right 5em
+  &:active
+    color #AAA
+    box-shadow 2px 2px 2px #AAA inset
+    position relative
+    left 2px
+    top 2px
+    opacity 1.0
+  &:hover
+    opacity 1.0
+    
 
 #painEntry .post
   width 100%
   visibility hidden
   &:hover
     background-color dhfheadertext
-
-#painEntry .post:active,
-#postPainEntry button:active,
-#pains button:active,
-body > footer button:active
-  color #DDD
-  box-shadow 2px 2px 2px #AAA inset
-  position relative
-  left 2px
-  top 2px
 
 #postPainEntry
   font-size 200%
@@ -227,20 +238,35 @@ body > footer button:active
     margin-top .5em
     &:hover
       opacity 1.0
-    /*
-    &.sticky
-      position fixed
-      top -.6em
-      left 50%
-      z-index 3
-      margin-left -5.25em
-*/
+      
 #pains
-  width 21em
   text-align left
   font-size 363%
-  overflow visible
   margin 1em 0 0 .5em
+  .content
+    position relative
+    display inline-block
+    width 18em
+    overflow visible
+    vertical-align top
+  .social
+    display inline-block
+    text-align center
+    width 3em
+    .shares
+    .post
+      display block
+      button
+        font-size 50%
+        width 1.120em
+        height 1.120em
+        text-align center
+        padding .06em
+        margin 0
+        font-weight bold
+        opacity .9
+      .twitter
+        margin-right .25em
   h2
     color dhfheadertext
     font-size inherit
@@ -268,43 +294,27 @@ body > footer button:active
     font-size 50%
     margin-left 5em
   li
+    width 21em
     clear both
     margin 0 2.75em 1.5em 0
     position relative
-    &:after
-      content "\3009"
-      display block
-      position absolute
-      right -1.25em
-      top 0
-      font-size 200%
-      opacity .3
-      font-weight 800
-      overflow visible
-      transition(all .25s ease-in-out)
-      &:hover
-        opacity 1.0
-    &.open:after
-      opacity 1.0
-      transform(rotate(90deg))
-      transform-origin(40% 50% 0)
     q:after
       content "\201D"
       color black
     &:nth-child(3n+0)
-      q:before, cite, &:after, a
+      q:before, cite, &:after, a, .social
         color dhfyellow
-      button
+      button, .social button
         background-color dhfyellow
     &:nth-child(3n+1)
-      q:before, cite, &:after, a
+      q:before, cite, &:after, a, .social
         color dhfblue
-      button
+      button, .social button
         background-color dhfblue
     &:nth-child(3n+2)
-      q:before, cite, &:after, a
+      q:before, cite, &:after, a, .social
         color dhfgreen
-      button
+      button, .social button
         background-color dhfgreen
 body > footer
   width 100%
