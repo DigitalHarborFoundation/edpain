@@ -172,11 +172,17 @@ body > header
     margin-bottom 1em
   textarea
     width 25.5em
-    height 4em
-    border .13em solid dhfheadertext
-    border-radius .075em
+    height 4.5em
+    border 0
+    background-image -webkit-gradient(linear, left top, left bottom, 
+      color-stop(.5, transparent), color-stop(.5, dhfheadertext), color-stop(.587, dhfheadertext), color-stop(.587, transparent), color-stop(1, transparent))
+    background-size 0em 1.5em;
+    background-position .15em .65em
+    background-clip content-box
     margin-bottom -.25em
-    padding .15em .25em
+    padding .15em 0
+    overflow hidden
+    line-height 1.5em
     &:focus
       outline none
   .name
