@@ -30,6 +30,10 @@
         return $("#painEntry .pluralRole").css("visibility", "hidden");
       }
     });
+    $("#pains nav li").click(function() {
+      $("#pains nav li").removeClass("active");
+      return $(this).addClass("active");
+    });
     showPostButton = function() {
       var post, zip, _ref, _ref1, _ref2;
       post = $("#painEntry .post");
@@ -79,10 +83,10 @@
         'data': data
       }));
       if (isPrepended) {
-        a.prependTo($("#pains ul"));
+        a.prependTo($("#pains .pains"));
       }
       if (!isPrepended) {
-        a.appendTo($("#pains ul"));
+        a.appendTo($("#pains .pains"));
       }
       a.hide();
       a.fadeIn('slow');
@@ -206,7 +210,7 @@
     });
     appendMorePains = function(callback) {
       var lastEntry;
-      lastEntry = $("#pains li:last-child").data("painData");
+      lastEntry = $("#pains .pains li:last-child").data("painData");
       return $.ajax({
         url: "/json/pains" + (lastEntry ? "?lastDate=" + lastEntry.date : ""),
         dataType: "json",

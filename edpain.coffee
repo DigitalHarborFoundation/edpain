@@ -24,6 +24,10 @@ $ ->
       $("#painEntry .pluralRole").css "visibility", "visible"
     else
       $("#painEntry .pluralRole").css "visibility", "hidden"
+  
+  $("#pains nav li").click ->
+    $("#pains nav li").removeClass "active"
+    $(this).addClass "active"
 
   # validation that controls if the post button shows
   showPostButton = ->
@@ -63,8 +67,8 @@ $ ->
   # displaying a new pain coming in
   addPain = (data, isPrepended) ->
     a = $ painDisplayTemplate 'data':data
-    a.prependTo ($ "#pains ul") if isPrepended
-    a.appendTo ($ "#pains ul") unless isPrepended
+    a.prependTo ($ "#pains .pains") if isPrepended
+    a.appendTo ($ "#pains .pains") unless isPrepended
     a.hide()
     a.fadeIn('slow')
     a.data "painData", data
@@ -167,7 +171,7 @@ $ ->
       newwindow.focus() if window.focus
       e.stopPropagation()
   appendMorePains = (callback) ->
-    lastEntry = $("#pains li:last-child").data "painData"
+    lastEntry = $("#pains .pains li:last-child").data "painData"
     $.ajax
       url: "/json/pains" + (if lastEntry then "?lastDate=" + lastEntry.date else "")
       dataType: "json"

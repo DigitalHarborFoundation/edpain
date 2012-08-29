@@ -130,36 +130,26 @@ body > header
 
 #painEntry, #postPainEntry 
   input
-    margin 0 .5em
-    border .13em solid dhfheadertext
-    border-top 0
-    border-right 0
-    border-left 0
-    border-radius .075em
-    padding .25em
     text-align center
     &:focus
       outline none
+    margin .25em
   .inputwrapper
-    margin 0
+    margin 0 .5em
     padding 0
-    display inline
+    display inline-block
     position relative
-    &:after, &:before
+    &:after
       content ""
       display block
       border .13em solid dhfheadertext
-      border-left 0
+      border-radius 0 0 .075em .075em
       border-top 0
-      border-bottom 0
       height .3em
-      float right
+      width 100%
       position absolute
-      bottom -.38em
-    &:after
-      right .5em
-    &:before
-      left .5em
+      bottom -.13em
+      left -.13em
 
 #painEntry
   .role
@@ -243,6 +233,59 @@ body > footer button
       opacity 1.0
       
 #pains
+  nav
+    text-align center
+    ul
+      text-align center
+      margin-bottom 1.5em
+      position relative
+      &:after
+        font-size 60%
+        content ""
+        display block
+        border .13em solid dhfheadertext
+        border-radius .075em .075em 0 0 
+        border-bottom 0
+        height .3em
+        width 90%
+        position absolute
+        bottom -1em
+        left 50%
+        margin-left -45%
+    li
+      width auto
+      margin 1em
+      text-align left
+      display inline-block
+      position relative
+      font-weight 500
+      font-family "helvetica"
+      font-size 60%
+      padding .25em
+      &.active
+        &:before
+          content ""
+          display block
+          border .13em solid dhfheadertext
+          border-radius 0 0 .075em .075em
+          border-top 0
+          height .3em
+          width 100%
+          position absolute
+          bottom -.13em
+          left -.13em
+        &:after
+          content ""
+          display block
+          position absolute
+          bottom -1.63em
+          left 50%
+          margin-left -.0675em
+          height 1.5em
+          border-left .13em solid dhfheadertext
+      &:hover
+        cursor pointer
+        color dhfblue
   text-align left
   font-size 363%
   margin 1em 0 0 .5em
@@ -296,29 +339,30 @@ body > footer button
     display block
     font-size 50%
     margin-left 5em
-  li
-    width 21em
-    clear both
-    margin 0 2.75em 1.5em 0
-    position relative
-    q:after
-      content "\201D"
-      color black
-    &:nth-child(3n+0)
-      q:before, cite, &:after, a, .social, q:hover
-        color dhfyellow
-      button, .social button
-        background-color dhfyellow
-    &:nth-child(3n+1)
-      q:before, cite, &:after, a, .social, q:hover
-        color dhfblue
-      button, .social button
-        background-color dhfblue
-    &:nth-child(3n+2)
-      q:before, cite, &:after, a, .social, q:hover
-        color dhfgreen
-      button, .social button
-        background-color dhfgreen
+  .pains
+    li
+      width 21em
+      clear both
+      margin 0 2.75em 1.5em 0
+      position relative
+      q:after
+        content "\201D"
+        color black
+      &:nth-child(3n+0)
+        q:before, cite, &:after, a, .social, q:hover
+          color dhfyellow
+        button, .social button
+          background-color dhfyellow
+      &:nth-child(3n+1)
+        q:before, cite, &:after, a, .social, q:hover
+          color dhfblue
+        button, .social button
+          background-color dhfblue
+      &:nth-child(3n+2)
+        q:before, cite, &:after, a, .social, q:hover
+          color dhfgreen
+        button, .social button
+          background-color dhfgreen
 body > footer
   width 100%
   clear both
